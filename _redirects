@@ -1,2 +1,1 @@
-/:class/:subject/:slug   /seo.html?class=:class&subject=:subject&slug=:slug   200
-/*   /index.html   200
+/download/:class/:subject/:slug  /seo.html?class=:class&subject=:subject&slug=:slug  200
