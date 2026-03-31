@@ -97,7 +97,6 @@ h1{
     color: #777;
 }
 
-/* Loading Animation */
 .pulse {
   animation: pulse-animation 2s infinite;
 }
@@ -149,11 +148,16 @@ const firebaseConfig = {
         
 const app = initializeApp(firebaseConfig);        
 const db = getFirestore(app);        
-        
-const params = new URLSearchParams(window.location.search);        
-const classId = params.get("class");        
-const subject = params.get("subject");        
-const slugId = params.get("slug");        
+
+// --- URL HANDLING LOGIC (Clean URL + Search Params) ---
+const pathParts = window.location.pathname.split('/'); 
+const params = new URLSearchParams(window.location.search);
+
+// புதிய /download/6/tamil/slug முறை அல்லது பழைய ?class=6 முறை இரண்டையும் எடுக்கும்
+const classId = pathParts[2] || params.get("class");        
+const subject = pathParts[3] || params.get("subject");        
+const slugId = pathParts[4] || params.get("slug");        
+// ------------------------------------------------------
         
 async function load(){        
     const heading = document.getElementById("heading");
@@ -202,7 +206,8 @@ async function load(){
             "This " + subject + " material is carefully prepared for class " + classId + " students to help in their upcoming examinations.";        
         }        
             
-        document.getElementById("canonical").href = window.location.origin + window.location.pathname + "?class=" + classId + "&subject=" + subject + "&slug=" + slugId;        
+        // Canonical URL update for SEO
+        document.getElementById("canonical").href = window.location.origin + "/download/" + classId + "/" + subject + "/" + slugId;        
             
         // ✅ DOWNLOAD BUTTON        
         btn.href = pdf;        
@@ -211,7 +216,7 @@ async function load(){
         btn.classList.remove("pulse");
 
     } catch(err){        
-        console.log(err);        
+        console.error(err);        
         heading.innerText = "Error loading data ❌";        
     }        
 }        
