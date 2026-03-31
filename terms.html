@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms & Conditions | Kalvi Vaanam</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family: 'Poppins', 'Hind Madurai', sans-serif;
+    background:#f8f9fa;
+    color: #333;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 25px;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color:white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.site-name{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.close-btn{
+    font-size:26px;
+    cursor:pointer;
+    color:white;
+    text-decoration:none;
+    transition: 0.3s;
+}
+.close-btn:hover { transform: rotate(90deg); opacity: 0.8; }
+
+.main{
+    padding:40px 25px;
+    max-width:850px;
+    margin:30px auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    line-height:1.8;
+}
+
+h1 {
+    color: #0d47a1;
+    font-size: 26px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e3f2fd;
+    padding-bottom: 15px;
+}
+
+.terms-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.en-box {
+    border-left: 5px solid #0d47a1;
+    background: #f1f8ff;
+}
+
+.ta-box {
+    border-left: 5px solid #2e7d32; /* பச்சை நிற பார்டர் தமிழ் பகுதிக்கு */
+    background: #f1fbf2;
+}
+
+h2 {
+    font-size: 19px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer{
+    background:#ffffff;
+    padding:40px 20px;
+    text-align:center;
+    margin-top:60px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #777;
+}
+
+ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+li { margin-bottom: 8px; }
+
+strong { color: #0d47a1; }
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 40px 0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="site-name">Kalvi Vaanam</div>
+    <a href="index.html" class="close-btn">✕</a>
+</div>
+
+<div class="main">
+
+    <h1>Terms & Conditions <br><span style="font-size: 17px; color: #666;">விதிமுறைகள் மற்றும் நிபந்தனைகள்</span></h1>
+
+    <div class="terms-section en-box">
+        <h2>⚖️ English</h2>
+        <p>By accessing and using <strong>Kalvi Vaanam</strong>, you agree to comply with the following terms:</p>
+        <ul>
+            <li><strong>Usage:</strong> Content provided here is strictly for personal and educational purposes only.</li>
+            <li><strong>Copyright:</strong> Copying, redistributing, or selling any study materials without prior permission is prohibited.</li>
+            <li><strong>Accuracy:</strong> While we strive for accuracy, students are advised to cross-check with official textbooks.</li>
+            <li><strong>Modifications:</strong> We reserve the right to change these terms at any time without prior notice.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="terms-section ta-box">
+        <h2>📝 தமிழ்</h2>
+        <p><strong>Kalvi Vaanam</strong> இணையதளத்தைப் பயன்படுத்துவதன் மூலம் பின்வரும் விதிமுறைகளை ஏற்கிறீர்கள்:</p>
+        <ul>
+            <li><strong>பயன்பாடு:</strong> இங்குள்ள உள்ளடக்கங்கள் கல்வி நோக்கத்திற்காக மட்டுமே வழங்கப்படுகின்றன.</li>
+            <li><strong>பதிப்புரிமை:</strong> அனுமதி இன்றி தகவல்களை நகலெடுக்கவோ, விற்கவோ அல்லது பிற தளங்களில் பகிரவோ கூடாது.</li>
+            <li><strong>உண்மைத்தன்மை:</strong> தகவல்கள் துல்லியமாக வழங்க முயற்சி செய்கிறோம், இருப்பினும் மாணவர்கள் பாடப்புத்தகங்களுடன் சரிபார்த்துக் கொள்ளவும்.</li>
+            <li><strong>மாற்றங்கள்:</strong> விதிமுறைகள் மற்றும் நிபந்தனைகள் எந்த நேரத்திலும் முன்னறிவிப்பின்றி மாற்றப்படலாம்.</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>© <span id="year"></span> Kalvi Vaanam | All Rights Reserved</p>
+</div>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>  
+<html lang="ta">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Kalvi Vaanam | Subjects</title>  
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
+  
+<style>  
+body {  
+    margin:0;  
+    font-family: 'Poppins', 'Hind Madurai', sans-serif;  
+    background:#f4f7fa;  
+}  
+.header{  
+    display:flex;  
+    justify-content:space-between;  
+    align-items:center;  
+    padding:15px 20px;  
+    background: linear-gradient(135deg, #0d47a1, #1976d2);  
+    color:white;  
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}  
+.logo-area{  
+    display:flex;  
+    align-items:center;  
+    gap:12px;  
+}  
+.logo-box{  
+    width:42px;  
+    height:42px;  
+    border-radius:50%;  
+    overflow:hidden;  
+    background:#ffffff;  
+    border: 2px solid #fff;
+}  
+.logo-box img{  
+    width:100%;  
+    height:100%;  
+    object-fit:cover;  
+}  
+.site-name{  
+    font-size:20px;  
+    font-weight:bold;  
+}  
+.menu-btn{  
+    font-size:26px;  
+    cursor:pointer;  
+}  
+.side-menu{  
+    position:fixed;  
+    top:0;  
+    left:-100%;  
+    width:280px;  
+    height:100%;  
+    background:#ffffff;  
+    box-shadow:5px 0 15px rgba(0,0,0,0.2);  
+    transition:0.4s cubic-bezier(0.4, 0, 0.2, 1);  
+    padding:30px 20px;  
+    z-index:1000;  
+}  
+.side-menu a{  
+    display:block;  
+    margin:15px 0;  
+    padding: 12px;
+    text-decoration:none;  
+    color:#333;  
+    font-size:17px;  
+    border-radius: 8px;
+    transition: 0.3s;
+}  
+.side-menu a:hover { background: #e3f2fd; color: #0d47a1; }
+.close-btn{ font-size:26px; cursor:pointer; text-align:right; color: #d32f2f; margin-bottom: 20px; }  
+
+/* Subject Container Style */
+.subject-box{  
+    width:90%;  
+    max-width:500px;  
+    margin:40px auto;  
+    padding:25px;  
+    background:#ffffff;  
+    border-radius: 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);  
+    text-align:center;  
+}  
+
+.subject-box h2 {
+    color: #0d47a1;
+    font-size: 22px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0f4f8;
+    padding-bottom: 10px;
+}
+
+.subject-box a{  
+    display:flex;  
+    align-items: center;
+    justify-content: center;
+    text-decoration:none;  
+    color:#0d47a1;  
+    font-size:18px;  
+    padding:15px;  
+    margin: 12px 0;
+    font-weight:bold;  
+    background: #f9fbff;
+    border: 2px solid #e3f2fd;
+    border-radius: 12px;
+    transition: 0.3s all ease;
+}  
+
+.subject-box a:hover{  
+    background:#0d47a1;
+    color: white;
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(13, 71, 161, 0.2);
+    border-color: #0d47a1;
+}  
+
+.footer{  
+    background:#ffffff;  
+    padding:40px 20px;  
+    text-align:center;  
+    margin-top:60px;  
+    border-top: 1px solid #eee;
+    color: #777;
+}  
+</style>  
+</head>  
+<body>  
+  
+<div class="header">  
+    <div class="logo-area">  
+        <div class="logo-box">  
+            <img src="logo.png">  
+        </div>  
+        <div class="site-name" id="classTitle">Kalvi Vaanam</div>  
+    </div>  
+    <div class="menu-btn" onclick="openMenu()">☰</div>  
+</div>  
+  
+<div class="side-menu" id="menu">  
+    <div class="close-btn" onclick="closeMenu()">✖</div>  
+    <a href="index.html">🏠 Home</a>  
+    <a href="about-us.html">ℹ️ About Us</a>  
+    <a href="mailto:ttnswamidayananda1947@gmail.com">📧 Contact Us</a>  
+    <a href="privacy-policy.html">🛡️ Privacy Policy</a>  
+    <a href="disclaimer.html">⚠️ Disclaimer</a>  
+    <a href="terms.html">📄 Terms & Conditions</a>  
+</div>  
+  
+<div class="subject-box">
+    <h2 id="containerHeading">Select Subject</h2>
+    <div id="subjectContainer"></div>
+</div>  
+  
+<div class="footer">  
+    <p>© <span id="year"></span> Kalvi Vaanam | TN Study Portal</p>  
+</div>  
+  
+<script>  
+function openMenu(){ document.getElementById("menu").style.left="0"; }  
+function closeMenu(){ document.getElementById("menu").style.left="-100%"; }  
+  
+document.getElementById("year").textContent = new Date().getFullYear();  
+  
+const params = new URLSearchParams(window.location.search);  
+const classId = params.get("class");  
+  
+// Title & Heading Update
+if(classId) {
+    document.title = classId + "th Subjects – Kalvi Vaanam";  
+    document.getElementById("classTitle").innerText = "Kalvi Vaanam - " + classId + "th Std";  
+    document.getElementById("containerHeading").innerText = "Class " + classId + " - Subjects";
+} else {
+    window.location.href = "index.html";
+}
+  
+let subjects = [];  
+  
+if(classId == "11" || classId == "12"){  
+    subjects = [  
+        {name:"தமிழ்", key:"tamil", icon:"📜"},  
+        {name:"English", key:"english", icon:"📖"},  
+        {name:"கணிதம் (Maths)", key:"maths", icon:"📐"},  
+        {name:"இயற்பியல் (Physics)", key:"physics", icon:"⚛️"},  
+        {name:"வேதியியல் (Chemistry)", key:"chemistry", icon:"🧪"},  
+        {name:"கணினி அறிவியல்", key:"computerscience", icon:"💻"},  
+        {name:"கணினி பயன்பாடு", key:"computerapplication", icon:"🖥️"}  
+    ];  
+}  
+else{  
+    subjects = [  
+        {name:"தமிழ்", key:"tamil", icon:"📜"},  
+        {name:"English", key:"english", icon:"📖"},  
+        {name:"கணிதம் (Maths)", key:"maths", icon:"📐"},  
+        {name:"அறிவியல் (Science)", key:"science", icon:"🔬"},  
+        {name:"சமூக அறிவியல்", key:"social", icon:"🌍"}  
+    ];  
+}  
+  
+const container = document.getElementById("subjectContainer");  
+  
+subjects.forEach(sub => {  
+    const a = document.createElement("a");  
+    a.innerHTML = `<span style="margin-right:10px;">${sub.icon}</span> ${sub.name}`;  
+    a.href = "material.html?class=" + classId + "&subject=" + sub.key;  
+    container.appendChild(a);  
+});  
+</script>  
+  
+</body>  
+</html>

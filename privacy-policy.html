@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | Kalvi Vaanam</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family: 'Poppins', 'Hind Madurai', sans-serif;
+    background:#f8f9fa; /* லேசான சாம்பல் நிற பின்னணி */
+    color: #333;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 25px;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color:white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.site-name{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.close-btn{
+    font-size:26px;
+    cursor:pointer;
+    color:white;
+    text-decoration:none;
+    transition: 0.3s;
+}
+.close-btn:hover { transform: rotate(90deg); opacity: 0.8; }
+
+.main{
+    padding:40px 20px;
+    max-width:850px;
+    margin:30px auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    line-height:1.8;
+}
+
+h1 {
+    color: #0d47a1;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e3f2fd;
+    padding-bottom: 15px;
+}
+
+.policy-section {
+    margin-bottom: 35px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.en-section {
+    border-left: 5px solid #0d47a1;
+    background: #f1f8ff;
+}
+
+.ta-section {
+    border-left: 5px solid #ff5722;
+    background: #fff8f1;
+}
+
+h2 {
+    font-size: 20px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer{
+    background:#ffffff;
+    padding:40px 20px;
+    text-align:center;
+    margin-top:60px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #777;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 40px 0;
+}
+
+strong { color: #0d47a1; }
+</style>
+
+</head>
+<body>
+
+<div class="header">
+    <div class="site-name">Kalvi Vaanam</div>
+    <a href="index.html" class="close-btn">✕</a>
+</div>
+
+<div class="main">
+
+    <h1>Privacy Policy <br><span style="font-size: 18px; color: #666;">தனியுரிமைக் கொள்கை</span></h1>
+
+    <div class="policy-section en-section">
+        <h2>🌐 English</h2>
+        <p>
+            Welcome to <strong>Kalvi Vaanam</strong>. This website is created for educational purposes, primarily for the students of T.T.N Swami Dayananda Higher Secondary School. Your privacy is important to us.
+        </p>
+        <ul>
+            <li><strong>Data Collection:</strong> We do not collect any personal identity information (PII) unless you voluntarily contact us via email.</li>
+            <li><strong>Cookies:</strong> We may use third-party services like Google AdSense, which uses cookies to show relevant ads based on your interests.</li>
+            <li><strong>Information Sharing:</strong> We strictly do not sell, trade, or share any user data with outside parties.</li>
+            <li><strong>Educational Use:</strong> All materials provided are for learning purposes only.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="policy-section ta-section">
+        <h2>📜 தமிழ்</h2>
+        <p>
+            <strong>Kalvi Vaanam</strong> இணையதளத்திற்கு உங்களை வரவேற்கிறோம். இது T.T.N Swami Dayananda Higher Secondary School மாணவர்களின் கல்வி நலனுக்காக உருவாக்கப்பட்ட தளம்.
+        </p>
+        <ul>
+            <li><strong>தகவல் சேகரிப்பு:</strong> பயனர்களின் தனிப்பட்ட தகவல்கள் (பெயர், முகவரி போன்றவை) உங்கள் அனுமதியின்றி சேகரிக்கப்படாது.</li>
+            <li><strong>Cookies:</strong> Google AdSense போன்ற மூன்றாம் தரப்பு சேவைகள், சிறந்த விளம்பர அனுபவத்திற்காக 'Cookies' பயன்படுத்தலாம்.</li>
+            <li><strong>தகவல் பாதுகாப்பு:</strong> உங்கள் தகவல்கள் எக்காரணம் கொண்டும் மற்றவர்களுக்கு விற்கப்படவோ அல்லது பகிரப்படவோ மாட்டாது.</li>
+            <li><strong>கல்வி நோக்கம்:</strong> இதில் பதிவேற்றப்படும் அனைத்து பிடிஎஃப் (PDF) கோப்புகளும் கல்வி நோக்கத்திற்காக மட்டுமே வழங்கப்படுகின்றன.</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>© <span id="year"></span> Kalvi Vaanam | Dedicated to Students</p>
+</div>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

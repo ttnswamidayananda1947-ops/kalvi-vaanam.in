@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalvi Vaanam Admin</title>
+
+<style>
+body{margin:0;font-family:Arial, sans-serif;background:#f5f5f5;}
+.header{background:#0d47a1;color:white;padding:15px;text-align:center;font-size:20px;font-weight:bold;}
+.container{width:95%;max-width:500px;margin:30px auto;padding:20px;background:white;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+h3{border-bottom: 2px solid #0d47a1; padding-bottom: 5px; color: #0d47a1; margin-top:20px;}
+input,select,textarea{width:100%;padding:10px;margin:10px 0;box-sizing:border-box; border: 1px solid #ccc; border-radius: 4px;}
+button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor:pointer;margin-top:5px;border-radius:5px; font-weight: bold;}
+.google-btn{background:#db4437;}
+.success-msg{display:none;background:#c8e6c9;color:#1b5e20;padding:10px;margin-top:10px;text-align:center;font-weight:bold; border-radius: 5px;}
+.view-area{margin-top:15px;background:#f1f1f1;padding:10px;min-height:50px;border-radius:5px;}
+.dashboard{display:none;}
+.delete-section{margin-top:30px;border-top:2px solid #ccc;padding-top:20px;}
+.delete-btn{background:#e53935;margin-top:10px;}
+.article-section{margin-top:30px; border-top: 4px solid #2e7d32; padding-top:20px; background: #f1f8e9; padding: 15px; border-radius: 8px;}
+</style>
+</head>
+
+<body>
+
+<div class="header">Kalvi Vaanam Admin Panel</div>
+
+<div class="container" id="loginBox">
+    <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
+</div>
+
+<div class="container dashboard" id="dashboard">
+
+    <h3>Add PDF</h3>
+    <select id="classSelect">
+        <option value="">Select Class</option>
+        <option>6</option><option>7</option><option>8</option>
+        <option>9</option><option>10</option><option>11</option><option>12</option>
+    </select>
+
+    <select id="subjectSelect">
+        <option value="">Select Subject</option>
+        <option>tamil</option><option>english</option><option>maths</option>
+        <option>science</option><option>social</option>
+        <option>physics</option><option>chemistry</option>
+        <option>computerscience</option>
+    </select>
+
+    <select id="typeSelect">
+        <option value="">Select Material Type</option>
+        <option value="question">Question Paper</option>
+        <option value="study">Study Material</option>
+    </select>
+
+    <input type="text" id="pdfName" placeholder="PDF Name">
+    <input type="text" id="pdfLink" placeholder="PDF Link">
+    <textarea id="pdfDesc" placeholder="Description (Tamil + English mix)"></textarea>
+    <input type="text" id="slugInput" placeholder="Slug (Optional)">
+
+    <button onclick="savePDF()">Save PDF ✅</button>
+
+    <hr>
+
+    <div class="article-section">
+        <h3 style="color: #2e7d32; border-color: #2e7d32;">Add Article (SEO)</h3>
+        <input type="text" id="artTitle" placeholder="Article Title">
+        <input type="text" id="artCategory" placeholder="Category">
+        <textarea id="artContent" style="height: 120px;" placeholder="Full Article Content"></textarea>
+        <input type="text" id="artSlug" placeholder="Article Slug">
+        <button style="background: #2e7d32;" onclick="saveArticle()">Save Article ✍️</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">Saved Successfully ✅</div>
+
+    <h3>View PDFs</h3>
+    <select id="viewClass"></select>
+    <select id="viewSubject"></select>
+    <button onclick="viewPDFs()">View List</button>
+    <div class="view-area" id="viewArea"></div>
+
+    <div class="delete-section">
+        <h3>Delete PDF</h3>
+        <select id="deleteClass"></select>
+        <select id="deleteSubject"></select>
+        <select id="deletePdf"></select>
+        <button class="delete-btn" onclick="deletePDF()">Delete Selected PDF 🗑️</button>
+    </div>
+
+    <button onclick="logout()" style="margin-top: 30px; background: #555;">Logout</button>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyDADvn4P8g_Dk6fraPNk56Ansrfx5ezgJU",
+    authDomain: "kalvi-vaanam-db.firebaseapp.com",
+    projectId: "kalvi-vaanam-db",
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function createSlug(text){
+    return text.toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g,"-");
+}
+
+function googleLogin(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+}
+
+auth.onAuthStateChanged(user=>{
+    if(user && user.email === "ttnswamidayananda1947@gmail.com"){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+    }else{
+        document.getElementById("loginBox").style.display="block";
+        document.getElementById("dashboard").style.display="none";
+    }
+});
+
+function logout(){ auth.signOut(); }
+
+function savePDF(){
+    const classVal = document.getElementById("classSelect").value;
+    const subjectVal = document.getElementById("subjectSelect").value;
+    const typeVal = document.getElementById("typeSelect").value;
+    const name = document.getElementById("pdfName").value;
+    const link = document.getElementById("pdfLink").value;
+    const desc = document.getElementById("pdfDesc").value;
+    let slug = document.getElementById("slugInput").value.trim();
+
+    if(!slug) slug = createSlug(name);
+    if(!classVal || !subjectVal || !typeVal || !name || !link){ alert("Please fill all fields!"); return; }
+
+    db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs")
+    .doc(slug).set({
+        name: name, link: link, description: desc, type: typeVal, slug: slug,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(()=>{ showSuccess(); clearPDFFields(); });
+}
+
+function clearPDFFields(){
+    document.getElementById("pdfName").value=""; document.getElementById("pdfLink").value=""; 
+    document.getElementById("pdfDesc").value=""; document.getElementById("slugInput").value="";
+}
+
+function saveArticle(){
+    const title = document.getElementById("artTitle").value;
+    const category = document.getElementById("artCategory").value;
+    const content = document.getElementById("artContent").value;
+    let slug = document.getElementById("artSlug").value.trim();
+    
+    if(!title || !content){ alert("Title and Content are required!"); return; }
+    if(!slug) slug = createSlug(title);
+
+    // ⭐ ஆர்டிகிள் தனி செக்ஷனில் சேமிக்கப்படும்
+    db.collection("articles").doc(slug).set({
+        title: title, category: category, content: content, slug: slug,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        showSuccess();
+        document.getElementById("artTitle").value = "";
+        document.getElementById("artCategory").value = "";
+        document.getElementById("artContent").value = "";
+        document.getElementById("artSlug").value = "";
+    }).catch(err => alert("Article Error: " + err.message));
+}
+
+function showSuccess(){
+    const msg = document.getElementById("successMsg");
+    msg.style.display="block";
+    setTimeout(()=>{ msg.style.display="none"; }, 3000);
+}
+
+function viewPDFs(){
+    const classVal = document.getElementById("viewClass").value;
+    const subjectVal = document.getElementById("viewSubject").value;
+    const area = document.getElementById("viewArea");
+    area.innerHTML="Loading...";
+    db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").get()
+    .then(snapshot=>{
+        area.innerHTML="";
+        if(snapshot.empty){ area.innerHTML="No PDFs found."; return; }
+        snapshot.forEach(doc=>{
+            const data = doc.data();
+            area.innerHTML += `<div><b>${data.name}</b> (${data.type})<br>Slug: ${doc.id}<hr></div>`;
+        });
+    });
+}
+
+function loadDeleteList(){
+    const classVal = document.getElementById("deleteClass").value;
+    const subjectVal = document.getElementById("deleteSubject").value;
+    const pdfSelect = document.getElementById("deletePdf");
+    pdfSelect.innerHTML="<option>Loading...</option>";
+    db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").get()
+    .then(snapshot=>{
+        pdfSelect.innerHTML="";
+        snapshot.forEach(doc=>{
+            const option = document.createElement("option");
+            option.value = doc.id; option.text = doc.data().name;
+            pdfSelect.appendChild(option);
+        });
+    });
+}
+
+function deletePDF(){
+    const classVal = document.getElementById("deleteClass").value;
+    const subjectVal = document.getElementById("deleteSubject").value;
+    const slug = document.getElementById("deletePdf").value;
+    if(!slug || slug === "Loading..."){ alert("Select a PDF"); return; }
+    if(!confirm("Delete?")) return;
+    db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").doc(slug).delete()
+    .then(()=>{ alert("Deleted! ✅"); loadDeleteList(); });
+}
+
+document.getElementById("viewClass").innerHTML = document.getElementById("classSelect").innerHTML;
+document.getElementById("viewSubject").innerHTML = document.getElementById("subjectSelect").innerHTML;
+document.getElementById("deleteClass").innerHTML = document.getElementById("classSelect").innerHTML;
+document.getElementById("deleteSubject").innerHTML = document.getElementById("subjectSelect").innerHTML;
+document.getElementById("deleteClass").onchange = loadDeleteList;
+document.getElementById("deleteSubject").onchange = loadDeleteList;
+
+</script>
+</body>
+</html>

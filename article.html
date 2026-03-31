@@ -1,0 +1,204 @@
+<!DOCTYPE html>    
+<html lang="ta">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<title id="metaTitle">கட்டுரைகள் | Kalvi Vaanam</title>    
+
+<meta name="description" content="Kalvi Vaanam வழங்கும் கல்வி சார்ந்த கட்டுரைகள் மற்றும் பயனுள்ள தகவல்கள். T.T.N Swami Dayananda Higher Secondary School மாணவர்களுக்கான சிறப்பு பகுதி.">
+<meta name="keywords" content="கல்வி கட்டுரைகள், கல்வி வானம், Kalvi Vaanam Articles, Education Tamil, Exam Tips Tamil, School Education">
+<meta name="author" content="Kalvi Vaanam Team">
+<meta name="robots" content="index, follow">
+
+<meta property="og:site_name" content="Kalvi Vaanam">
+<meta property="og:title" content="கட்டுரைகள் | Kalvi Vaanam">
+<meta property="og:description" content="மாணவர்களுக்கான பயனுள்ள கல்வி கட்டுரைகள் மற்றும் பாடக்குறிப்புகள் இங்கே கிடைக்கும்.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="logo.png"> <meta property="og:url" content="https://www.kalvivaanam.com/articles.html">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="கட்டுரைகள் | Kalvi Vaanam">
+<meta name="twitter:description" content="கல்வி சார்ந்த சிறப்புக் கட்டுரைகள் - கல்வி வானம்.">
+
+<style>    
+body{ margin:0; font-family: Arial, sans-serif; background:#f9f9f9; color: #333; }    
+    
+/* ✅ HEADER STYLE */
+.header{ display:flex; justify-content:space-between; align-items:center; padding:15px; background:#0d47a1; color:white; }    
+.logo-area{ display:flex; align-items:center; gap:10px; }    
+.logo-box{ width:40px; height:40px; border-radius:50%; overflow:hidden; background:#ffffff; }    
+.logo-box img{ width:100%; height:100%; object-fit:cover; }    
+.site-name{ font-size:22px; font-weight:bold; }    
+.menu-btn{ font-size:26px; cursor:pointer; }    
+    
+/* ✅ SIDE MENU */
+.side-menu{ position:fixed; top:0; left:-100%; width:250px; height:100%; background:#f5f5f5; box-shadow:2px 0 5px rgba(0,0,0,0.2); transition:0.3s; padding:20px; z-index:1000; }    
+.side-menu a{ display:block; margin:20px 0; text-decoration:none; color:#333; font-size:18px; }    
+.close-btn{ font-size:22px; cursor:pointer; text-align:right; }    
+    
+/* ✅ ARTICLE LIST STYLE */
+.container{ max-width: 800px; margin: 30px auto; padding: 15px; }
+.list-title{ font-size: 24px; color: #0d47a1; border-left: 5px solid #0d47a1; padding-left: 10px; margin-bottom: 20px; }
+
+.article-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid #eee;
+}
+.article-item:hover { transform: translateY(-3px); border-color: #0d47a1; }
+.article-item h3 { margin: 0 0 5px 0; color: #0d47a1; font-size: 18px; }
+.article-item p { margin: 0; font-size: 14px; color: #666; }
+
+/* ✅ FULL ARTICLE CONTENT STYLE */
+#fullArticleView { display: none; } /* ஆரம்பத்தில் மறைத்து வைக்கப்படும் */
+.article-card{ background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.category-badge{ background: #e3f2fd; color: #0d47a1; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+h1{ color: #0d47a1; font-size: 26px; margin-top: 15px; line-height: 1.3; }
+.meta-info{ font-size: 14px; color: #777; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+#artContent{ font-size: 18px; text-align: justify; white-space: pre-wrap; line-height: 1.8; }
+
+.back-link { color: #0d47a1; cursor: pointer; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+
+/* ✅ FOOTER STYLE */
+.footer{ background:#eeeeee; padding:40px 20px; text-align:center; margin-top:60px; }    
+</style>    
+</head>    
+    
+<body>    
+    
+<div class="header">    
+    <div class="logo-area">    
+        <div class="logo-box"><img src="logo.png" alt="Kalvi Vaanam Logo"></div>    
+        <div class="site-name">Kalvi Vaanam</div>    
+    </div>    
+    <div class="menu-btn" onclick="openMenu()" aria-label="Open Menu">☰</div>    
+</div>    
+    
+<div class="side-menu" id="menu">    
+    <div class="close-btn" onclick="closeMenu()">✖</div>    
+    <a href="index.html">Home</a>    
+    <a href="mailto:ttnswamidayananda1947@gmail.com">Contact</a>    
+</div>    
+    
+<div class="container">
+    <div id="listView">
+        <h2 class="list-title">அனைத்து கட்டுரைகள்</h2>
+        <div id="articlesContainer">கட்டுரைகள் லோடு ஆகிறது...</div>
+    </div>
+
+    <div id="fullArticleView">
+        <div class="back-link" onclick="showList()">← மீண்டும் பட்டியலுக்குச் செல்ல</div>
+        <div class="article-card">
+            <article>
+                <span class="category-badge" id="artCategory">CATEGORY</span>
+                <h1 id="artHeading">தலைப்பு</h1>
+                <div class="meta-info">
+                    பதிவேற்றியவர்: Kalvi Vaanam Team | தேதி: <span id="artDate">--</span>
+                </div>
+                <div id="artContent">உள்ளடக்கம்...</div>
+            </article>
+        </div>
+    </div>
+</div>    
+    
+<div class="footer">    
+    <p>© 2026 Kalvi Vaanam</p>    
+</div>    
+    
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDADvn4P8g_Dk6fraPNk56Ansrfx5ezgJU",
+        authDomain: "kalvi-vaanam-db.firebaseapp.com",
+        projectId: "kalvi-vaanam-db",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const container = document.getElementById("articlesContainer");
+    const listView = document.getElementById("listView");
+    const fullView = document.getElementById("fullArticleView");
+
+    // 1. அனைத்து தலைப்புகளையும் லோடு செய்யும் பங்க்ஷன்
+    async function loadArticlesList() {
+        try {
+            const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            container.innerHTML = "";
+
+            if (querySnapshot.empty) {
+                container.innerHTML = "தற்போது கட்டுரைகள் எதுவும் இல்லை.";
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const item = document.createElement("div");
+                item.className = "article-item";
+                item.onclick = () => viewArticle(doc.id); // கிளிக் செய்தால் கட்டுரை காட்டும்
+                
+                item.innerHTML = `
+                    <h3>${data.title}</h3>
+                    <p>${data.category || 'General'} | ${data.createdAt ? data.createdAt.toDate().toLocaleDateString('ta-IN') : ''}</p>
+                `;
+                container.appendChild(item);
+            });
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = "Error loading articles.";
+        }
+    }
+
+    // 2. குறிப்பிட்ட ஒரு கட்டுரையை மட்டும் காட்டும் பங்க்ஷன்
+    async function viewArticle(slug) {
+        listView.style.display = "none";
+        fullView.style.display = "block";
+        window.scrollTo(0, 0);
+
+        try {
+            const docRef = doc(db, "articles", slug);
+            const snap = await getDoc(docRef);
+
+            if (snap.exists()) {
+                const data = snap.data();
+                document.getElementById("artHeading").innerText = data.title;
+                document.getElementById("artCategory").innerText = data.category || "General";
+                document.getElementById("artContent").innerText = data.content;
+                document.getElementById("artDate").innerText = data.createdAt ? data.createdAt.toDate().toLocaleDateString('ta-IN') : "--";
+                
+                // ✅ DYNAMIC META UPDATE
+                document.title = data.title + " | Kalvi Vaanam";
+                // Page description Update (Optional via JS)
+                const descMeta = document.querySelector('meta[name="description"]');
+                if(descMeta) descMeta.setAttribute("content", data.content.substring(0, 150));
+            }
+        } catch (err) {
+            alert("Error loading content");
+        }
+    }
+
+    // பட்டியலுக்குத் திரும்பச் செல்ல
+    window.showList = function() {
+        fullView.style.display = "none";
+        listView.style.display = "block";
+        document.title = "கட்டுரைகள் | Kalvi Vaanam";
+    }
+
+    loadArticlesList();
+</script>
+
+<script>    
+function openMenu(){ document.getElementById("menu").style.left="0"; }    
+function closeMenu(){ document.getElementById("menu").style.left="-100%"; }    
+</script>    
+    
+</body>    
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>  
+<html lang="ta">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Select Material Type | Kalvi Vaanam</title>  
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
+
+<style>  
+/* பொதுவான மாற்றங்கள் */
+body { 
+    margin:0; 
+    font-family: 'Poppins', 'Hind Madurai', sans-serif; 
+    background:#f9fbff; /* லேசான நீல நிற பின்னணி */
+}  
+
+.header{ 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    padding:15px 20px; 
+    background: linear-gradient(135deg, #0d47a1, #1976d2); /* Gradient நிறம் */
+    color:white; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}  
+
+.logo-area{ display:flex; align-items:center; gap:12px; }  
+.logo-box{ 
+    width:42px; 
+    height:42px; 
+    border-radius:50%; 
+    overflow:hidden; 
+    background:#ffffff; 
+    border: 2px solid #fff;
+}  
+.logo-box img{ width:100%; height:100%; object-fit:cover; }  
+.site-name{ font-size:22px; font-weight:bold; letter-spacing: 1px; }  
+
+/* Side Menu Style */
+.side-menu{ 
+    position:fixed; 
+    top:0; 
+    left:-100%; 
+    width:280px; 
+    height:100%; 
+    background:#ffffff; 
+    box-shadow:5px 0 15px rgba(0,0,0,0.1); 
+    transition:0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    padding:30px 20px; 
+    z-index:1000; 
+}  
+.side-menu a{ 
+    display:block; 
+    margin:15px 0; 
+    padding: 12px;
+    text-decoration:none; 
+    color:#333; 
+    font-size:17px; 
+    border-radius: 8px;
+    transition: 0.3s;
+}  
+.side-menu a:hover { background: #e3f2fd; color: #0d47a1; }
+.close-btn{ font-size:26px; cursor:pointer; text-align:right; color: #d32f2f; margin-bottom: 20px; }  
+
+/* Material Box மேம்படுத்தப்பட்டுள்ளது */
+.material-box{ 
+    width:90%; 
+    max-width:480px; 
+    margin:50px auto; 
+    text-align:center; 
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}  
+
+.material-box h2 { 
+    color: #0d47a1; 
+    font-size: 24px; 
+    margin-bottom: 30px; 
+    position: relative;
+    padding-bottom: 10px;
+}
+.material-box h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #0d47a1;
+    border-radius: 2px;
+}
+
+.material-btn{ 
+    display:flex; /* Flexbox பயன்படுத்தி icon மற்றும் text சீராக வைக்கப்பட்டுள்ளது */
+    flex-direction: column;
+    align-items: center;
+    text-decoration:none; 
+    background:#ffffff; 
+    color:#0d47a1; 
+    font-size:19px; 
+    padding:22px; 
+    margin:20px 0; 
+    border-radius:15px; 
+    font-weight:bold; 
+    border: 2px solid #e3f2fd;
+    transition: 0.3s all ease; 
+    box-shadow: 0 4px 12px rgba(13, 71, 161, 0.08);
+}  
+
+.material-btn:hover{ 
+    background:#0d47a1; 
+    color: white; 
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
+    border-color: #0d47a1;
+}  
+
+.material-btn span { 
+    display: block; 
+    font-size: 14px; 
+    font-weight: normal; 
+    margin-top: 8px; 
+    opacity: 0.9; 
+    line-height: 1.4;
+}
+
+/* Breadcrumb - வழித்தடம் காட்டும் பகுதி */
+#breadCrumb {
+    background: #f1f8ff;
+    padding: 10px;
+    border-radius: 30px;
+    display: inline-block;
+    padding: 8px 20px;
+}
+
+.footer{ 
+    background:#ffffff; 
+    padding:30px 20px; 
+    text-align:center; 
+    margin-top:60px; 
+    border-top: 1px solid #eee;
+    color: #777;
+}  
+
+/* பட்டன் மீது வைக்கும்போது உள்ளிருக்கும் சிறிய எழுத்துக்கள் வெள்ளையாக மாற */
+.material-btn:hover span { color: #bbdefb; }
+
+</style>  
+</head>  
+<body>  
+  
+<div class="header">  
+    <div class="logo-area">  
+        <div class="logo-box"><img src="logo.png" alt="Kalvi Vaanam Logo"></div>  
+        <div class="site-name" id="pageHeader">Kalvi Vaanam</div>  
+    </div>  
+    <div class="menu-btn" onclick="openMenu()">☰</div>  
+</div>  
+  
+<div class="side-menu" id="menu">  
+    <div class="close-btn" onclick="closeMenu()">✖</div>  
+    <a href="index.html">🏠 Home</a>  
+    <a href="about-us.html">ℹ️ About Us</a>  
+    <a href="mailto:ttnswamidayananda1947@gmail.com">📧 Contact Us</a>  
+</div>  
+  
+<div class="material-box">  
+    <h2 id="infoText">Select Material</h2>
+    
+    <a href="#" id="qnBtn" class="material-btn">
+        📝 Question Papers
+        <span>மாதிரி மற்றும் பொதுத்தேர்வு வினாத்தாள்கள் (Sample & Public Exam Papers)</span>
+    </a>
+    
+    <a href="#" id="studyBtn" class="material-btn">
+        📚 Study Materials
+        <span>முக்கியமான குறிப்புகள் மற்றும் கையேடுகள் (Notes & Guides)</span>
+    </a>
+
+    <p style="font-size: 13px; color: #0d47a1; margin-top: 25px; font-weight: bold;" id="breadCrumb"></p>
+</div>  
+  
+<div class="footer">  
+    <p>© 2026 Kalvi Vaanam | All Rights Reserved</p>  
+</div>  
+  
+<script>  
+function openMenu(){ document.getElementById("menu").style.left="0"; }  
+function closeMenu(){ document.getElementById("menu").style.left="-100%"; }  
+  
+const params = new URLSearchParams(window.location.search);  
+const classId = params.get("class");  
+const subjectId = params.get("subject");  
+
+if(classId && subjectId) {
+    // வகுப்பை பொறுத்து பெயரை அழகாக்குதல் (எ.கா: 12th Std)
+    let displayClass = classId;
+    if(!isNaN(classId)) displayClass = classId + "th Std";
+
+    document.getElementById("breadCrumb").innerHTML = "📍 " + displayClass + " ➔ " + subjectId.toUpperCase();
+    
+    document.getElementById("qnBtn").href = `papers.html?class=${classId}&subject=${subjectId}&type=question`;
+    document.getElementById("studyBtn").href = `papers.html?class=${classId}&subject=${subjectId}&type=study`;
+} else {
+    window.location.href = "index.html"; 
+}
+</script>  
+  
+</body>  
+</html>
