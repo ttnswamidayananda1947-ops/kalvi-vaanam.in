@@ -12,105 +12,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
         
 <style>        
-body{        
-    font-family: 'Poppins', 'Hind Madurai', sans-serif;        
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;        
-    background-color: #f4f7fa;
-    color: #333;
-}        
-
-.header{      
-    display:flex;      
-    justify-content:space-between;      
-    align-items:center;      
-    padding:15px 20px;      
-    background: linear-gradient(135deg, #0d47a1, #1976d2);      
-    color:white;      
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}      
-
+body{ font-family: 'Poppins', 'Hind Madurai', sans-serif; margin: 0; padding: 0; line-height: 1.6; background-color: #f4f7fa; color: #333; }        
+.header{ display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background: linear-gradient(135deg, #0d47a1, #1976d2); color:white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }      
 .site-name{ font-size:20px; font-weight:bold; }
 .close-link { color: white; text-decoration: none; font-size: 24px; }
-
-.container {
-    width: 92%;
-    max-width: 700px;
-    margin: 40px auto;
-    background: white;
-    padding: 35px 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    text-align: center;
-}
-        
-h1{        
-    color: #0d47a1;        
-    font-size: 24px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e3f2fd;
-    padding-bottom: 15px;
-}        
-
-.pdf-icon {
-    font-size: 60px;
-    margin-bottom: 15px;
-    display: block;
-}
-        
-.download-btn{        
-    display: inline-block;        
-    background: linear-gradient(135deg, #0d47a1, #1976d2);        
-    color: white;        
-    padding: 15px 35px;        
-    text-decoration: none;        
-    border-radius: 50px;        
-    font-weight: bold;        
-    margin-top: 25px;        
-    font-size: 18px;        
-    box-shadow: 0 6px 15px rgba(13, 71, 161, 0.3);
-    transition: 0.3s;
-}        
-.download-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.4);
-}
-        
-#descText, #extraText {        
-    color: #555;        
-    font-size: 16px;        
-    margin-top: 15px;
-    background: #f9fbff;
-    padding: 15px;
-    border-radius: 10px;
-    border-left: 4px solid #0d47a1;
-    text-align: left;
-}        
-
-.footer{      
-    background:#ffffff;      
-    padding:40px 20px;      
-    text-align:center;      
-    margin-top:60px;      
-    border-top: 1px solid #eee;
-    color: #777;
-}
-
-.pulse {
-  animation: pulse-animation 2s infinite;
-}
-@keyframes pulse-animation {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
+.container { width: 92%; max-width: 700px; margin: 40px auto; background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
+h1{ color: #0d47a1; font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #e3f2fd; padding-bottom: 15px; }        
+.pdf-icon { font-size: 60px; margin-bottom: 15px; display: block; }
+.download-btn{ display: inline-block; background: linear-gradient(135deg, #0d47a1, #1976d2); color: white; padding: 15px 35px; text-decoration: none; border-radius: 50px; font-weight: bold; margin-top: 25px; font-size: 18px; box-shadow: 0 6px 15px rgba(13, 71, 161, 0.3); transition: 0.3s; }        
+.download-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(13, 71, 161, 0.4); }
+#descText, #extraText { color: #555; font-size: 16px; margin-top: 15px; background: #f9fbff; padding: 15px; border-radius: 10px; border-left: 4px solid #0d47a1; text-align: left; }        
+.footer{ background:#ffffff; padding:40px 20px; text-align:center; margin-top:60px; border-top: 1px solid #eee; color: #777; }
+.pulse { animation: pulse-animation 2s infinite; }
+@keyframes pulse-animation { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 </style>        
-        
 </head>        
         
 <body>        
-
 <div class="header">
     <div class="site-name">Kalvi Vaanam</div>
     <a href="index.html" class="close-link">✕</a>
@@ -119,13 +37,9 @@ h1{
 <div class="container">
     <span class="pdf-icon">📄</span>
     <h1 id="heading" class="pulse">Loading Details...</h1>        
-    
     <p id="descText">Please wait while we fetch the document information for you.</p>        
-    
     <p id="extraText">Preparation is the key to success. Download our verified materials for better results.</p>        
-    
     <br>        
-    
     <a id="downloadBtn" class="download-btn pulse">Processing...</a>        
 </div>
 
@@ -149,15 +63,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);        
 const db = getFirestore(app);        
 
-// --- URL HANDLING LOGIC (Clean URL + Search Params) ---
 const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);
 
-// புதிய /download/6/tamil/slug முறை அல்லது பழைய ?class=6 முறை இரண்டையும் எடுக்கும்
 const classId = pathParts[2] || params.get("class");        
 const subject = pathParts[3] || params.get("subject");        
 const slugId = pathParts[4] || params.get("slug");        
-// ------------------------------------------------------
+
+// ✨ AUTO-CLEAN URL: பழைய லிங்கை அட்ரஸ் பாரில் புதிய லிங்காக மாற்றும்
+if (window.location.search.includes('class=')) {
+    const cleanPath = `/download/${classId}/${subject}/${slugId}`;
+    window.history.replaceState({}, '', cleanPath);
+}
         
 async function load(){        
     const heading = document.getElementById("heading");
@@ -188,9 +105,7 @@ async function load(){
             return;        
         }        
             
-        // ✅ SEO & CONTENT UPDATE
-        const pageTitle = data.name + " | Download PDF | Kalvi Vaanam";        
-        document.title = pageTitle;        
+        document.title = data.name + " | Download PDF | Kalvi Vaanam";        
         heading.innerText = data.name;        
         heading.classList.remove("pulse");
 
@@ -198,18 +113,11 @@ async function load(){
         document.getElementById("desc").setAttribute("content", dText);        
         document.getElementById("descText").innerText = dText;        
             
-        const customDesc = data.description || "";        
-        if(customDesc){        
-            document.getElementById("extraText").innerText = customDesc;        
-        }else{        
-            document.getElementById("extraText").innerText = 
-            "This " + subject + " material is carefully prepared for class " + classId + " students to help in their upcoming examinations.";        
-        }        
+        document.getElementById("extraText").innerText = data.description || 
+            ("This " + subject + " material is carefully prepared for class " + classId + " students for better results.");        
             
-        // Canonical URL update for SEO
         document.getElementById("canonical").href = window.location.origin + "/download/" + classId + "/" + subject + "/" + slugId;        
             
-        // ✅ DOWNLOAD BUTTON        
         btn.href = pdf;        
         btn.target = "_blank";        
         btn.innerText = "⬇️ Download PDF Now";        
@@ -224,6 +132,5 @@ async function load(){
 load();        
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>        
-        
 </body>        
 </html>
