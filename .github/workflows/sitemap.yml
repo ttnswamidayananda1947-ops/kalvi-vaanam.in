@@ -1,0 +1,26 @@
+name: Update Sitemap
+on:
+  schedule:
+    - cron: '0 0 * * *' # தினமும் நள்ளிரவில் தானாக ரன் ஆகும்
+  push:
+    branches: [ main ] # நீங்க எப்போ கோட் அப்லோட் பண்ணாலும் ரன் ஆகும்
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install node-fetch
+      - run: node scripts/generate-sitemap.js
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'Sitemap Bot'
+          git config --global user.email 'bot@kalvivaanam.in'
+          git add sitemap.xml
+          git commit -m "Automated sitemap update" || exit 0
+          git push
+          
