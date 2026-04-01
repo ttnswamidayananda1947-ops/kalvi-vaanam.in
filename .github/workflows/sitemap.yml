@@ -1,19 +1,23 @@
 name: Update Sitemap
 on:
   schedule:
-    - cron: '0 0 * * *' # தினமும் நள்ளிரவில் தானாக ரன் ஆகும்
+    - cron: '0 0 * * *'
   push:
-    branches: [ main ] # நீங்க எப்போ கோட் அப்லோட் பண்ணாலும் ரன் ஆகும்
+    branches: [ main ]
+  workflow_dispatch: # இது நீங்கள் கைமுறையாக ரன் செய்ய உதவும்
+
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
       - run: npm install node-fetch
       - run: node scripts/generate-sitemap.js
       - name: Commit and Push
@@ -23,4 +27,3 @@ jobs:
           git add sitemap.xml
           git commit -m "Automated sitemap update" || exit 0
           git push
-          
