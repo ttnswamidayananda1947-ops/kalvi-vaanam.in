@@ -19,6 +19,7 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 .delete-section{margin-top:30px;border-top:2px solid #ccc;padding-top:20px;}
 .delete-btn{background:#e53935;margin-top:10px;}
 .article-section{margin-top:30px; border-top: 4px solid #2e7d32; padding-top:20px; background: #f1f8e9; padding: 15px; border-radius: 8px;}
+.prog-section{margin-top:30px; border-top: 4px solid #6a1b9a; padding-top:20px; background: #f3e5f5; padding: 15px; border-radius: 8px;}
 </style>
 </head>
 
@@ -60,7 +61,14 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 
     <button onclick="savePDF()">Save PDF ✅</button>
 
-    <hr>
+    <div class="prog-section">
+        <h3 style="color: #6a1b9a; border-color: #6a1b9a;">Add Programming 💻</h3>
+        <input type="text" id="progTitle" placeholder="Program Title">
+        <textarea id="progCode" style="height: 150px; font-family: monospace;" placeholder="Paste Full Program Code Here..."></textarea>
+        <input type="text" id="progPdfLink" placeholder="PDF Download Link">
+        <input type="text" id="progYtLink" placeholder="YouTube Video Link">
+        <button style="background: #6a1b9a;" onclick="saveProgramming()">Save Program 🚀</button>
+    </div>
 
     <div class="article-section">
         <h3 style="color: #2e7d32; border-color: #2e7d32;">Add Article (SEO)</h3>
@@ -151,6 +159,32 @@ function clearPDFFields(){
     document.getElementById("pdfDesc").value=""; document.getElementById("slugInput").value="";
 }
 
+function saveProgramming(){
+    const title = document.getElementById("progTitle").value;
+    const code = document.getElementById("progCode").value;
+    const pdfLink = document.getElementById("progPdfLink").value;
+    const ytLink = document.getElementById("progYtLink").value;
+    
+    if(!title || !code){ alert("Title and Program Code are required!"); return; }
+    
+    const slug = createSlug(title);
+
+    db.collection("programming").doc(slug).set({
+        title: title,
+        code: code,
+        pdfLink: pdfLink,
+        youtubeLink: ytLink,
+        slug: slug,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        showSuccess();
+        document.getElementById("progTitle").value = "";
+        document.getElementById("progCode").value = "";
+        document.getElementById("progPdfLink").value = "";
+        document.getElementById("progYtLink").value = "";
+    }).catch(err => alert("Error: " + err.message));
+}
+
 function saveArticle(){
     const title = document.getElementById("artTitle").value;
     const category = document.getElementById("artCategory").value;
@@ -160,7 +194,6 @@ function saveArticle(){
     if(!title || !content){ alert("Title and Content are required!"); return; }
     if(!slug) slug = createSlug(title);
 
-    // ⭐ ஆர்டிகிள் தனி செக்ஷனில் சேமிக்கப்படும்
     db.collection("articles").doc(slug).set({
         title: title, category: category, content: content, slug: slug,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
