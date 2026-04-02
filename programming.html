@@ -1,0 +1,218 @@
+<!DOCTYPE html>    
+<html lang="ta">    
+<head>    
+<meta charset="UTF-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<title id="metaTitle">புரோகிராமிங் | Kalvi Vaanam</title>    
+
+<meta name="description" content="Kalvi Vaanam வழங்கும் கம்ப்யூட்டர் சயின்ஸ் மாணவர்களுக்கான புரோகிராமிங் பயிற்சிகள் மற்றும் கோடிங் விளக்கங்கள்.">
+<meta name="keywords" content="Programming Tamil, Coding Tamil, Python Tamil, Computer Science Tamil, Kalvi Vaanam Programming">
+<meta name="author" content="Kalvi Vaanam Team">
+<meta name="robots" content="index, follow">
+
+<style>    
+body{ margin:0; font-family: Arial, sans-serif; background:#f9f9f9; color: #333; }    
+    
+/* ✅ HEADER STYLE */
+.header{ display:flex; justify-content:space-between; align-items:center; padding:15px; background:#6a1b9a; color:white; }    
+.logo-area{ display:flex; align-items:center; gap:10px; }    
+.logo-box{ width:40px; height:40px; border-radius:50%; overflow:hidden; background:#ffffff; }    
+.logo-box img{ width:100%; height:100%; object-fit:cover; }    
+.site-name{ font-size:22px; font-weight:bold; }    
+.menu-btn{ font-size:26px; cursor:pointer; }    
+    
+/* ✅ SIDE MENU */
+.side-menu{ position:fixed; top:0; left:-100%; width:250px; height:100%; background:#f5f5f5; box-shadow:2px 0 5px rgba(0,0,0,0.2); transition:0.3s; padding:20px; z-index:1000; }    
+.side-menu a{ display:block; margin:20px 0; text-decoration:none; color:#333; font-size:18px; }    
+.close-btn{ font-size:22px; cursor:pointer; text-align:right; }    
+    
+/* ✅ PROGRAM LIST STYLE */
+.container{ max-width: 800px; margin: 30px auto; padding: 15px; }
+.list-title{ font-size: 24px; color: #6a1b9a; border-left: 5px solid #6a1b9a; padding-left: 10px; margin-bottom: 20px; }
+
+.prog-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid #eee;
+}
+.prog-item:hover { transform: translateY(-3px); border-color: #6a1b9a; }
+.prog-item h3 { margin: 0 0 5px 0; color: #6a1b9a; font-size: 18px; }
+.prog-item p { margin: 0; font-size: 14px; color: #666; }
+
+/* ✅ FULL CONTENT STYLE */
+#fullView { display: none; } 
+.card{ background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.badge{ background: #f3e5f5; color: #6a1b9a; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+h1{ color: #6a1b9a; font-size: 26px; margin-top: 15px; line-height: 1.3; }
+
+/* Code Box Style */
+#contentBody { 
+    background: #272822; 
+    color: #f8f8f2; 
+    padding: 15px; 
+    border-radius: 5px; 
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 16px; 
+    white-space: pre-wrap; 
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.links-container { margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-link { 
+    text-decoration: none; 
+    padding: 10px 15px; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    font-size: 14px; 
+    color: white; 
+}
+.pdf-btn { background: #e53935; }
+.yt-btn { background: #ff0000; }
+
+.back-link { color: #6a1b9a; cursor: pointer; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+
+/* ✅ FOOTER STYLE */
+.footer{ background:#eeeeee; padding:40px 20px; text-align:center; margin-top:60px; }    
+</style>    
+</head>    
+    
+<body>    
+    
+<div class="header">    
+    <div class="logo-area">    
+        <div class="logo-box"><img src="logo.png" alt="Kalvi Vaanam Logo"></div>    
+        <div class="site-name">Kalvi Vaanam</div>    
+    </div>    
+    <div class="menu-btn" onclick="openMenu()" aria-label="Open Menu">☰</div>    
+</div>    
+    
+<div class="side-menu" id="menu">    
+    <div class="close-btn" onclick="closeMenu()">✖</div>    
+    <a href="index.html">Home</a>    
+    <a href="mailto:ttnswamidayananda1947@gmail.com">Contact</a>    
+</div>    
+    
+<div class="container">
+    <div id="listView">
+        <h2 class="list-title">புரோகிராமிங் பயிற்சிகள்</h2>
+        <div id="itemsContainer">புரோகிராம்கள் லோடு ஆகிறது...</div>
+    </div>
+
+    <div id="fullView">
+        <div class="back-link" onclick="showList()">← மீண்டும் பட்டியலுக்குச் செல்ல</div>
+        <div class="card">
+            <span class="badge">PROGRAMMING</span>
+            <h1 id="headingTitle">தலைப்பு</h1>
+            <div id="contentBody">கோடிங் லோடு ஆகிறது...</div>
+            
+            <div class="links-container">
+                <a id="pdfLink" href="#" target="_blank" class="btn-link pdf-btn" style="display:none;">📄 Download PDF</a>
+                <a id="ytLink" href="#" target="_blank" class="btn-link yt-btn" style="display:none;">▶️ Watch Video</a>
+            </div>
+        </div>
+    </div>
+</div>    
+    
+<div class="footer">    
+    <p>© 2026 Kalvi Vaanam | கல்வியின் புகலிடம்</p>    
+</div>    
+    
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDADvn4P8g_Dk6fraPNk56Ansrfx5ezgJU",
+        authDomain: "kalvi-vaanam-db.firebaseapp.com",
+        projectId: "kalvi-vaanam-db",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const container = document.getElementById("itemsContainer");
+    const listView = document.getElementById("listView");
+    const fullView = document.getElementById("fullView");
+
+    async function loadPrograms() {
+        try {
+            // 'programming' கலெக்ஷனில் இருந்து டேட்டாவை எடுக்கிறது
+            const q = query(collection(db, "programming"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            container.innerHTML = "";
+
+            if (querySnapshot.empty) {
+                container.innerHTML = "தற்போது புரோகிராம்கள் எதுவும் இல்லை.";
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const item = document.createElement("div");
+                item.className = "prog-item";
+                item.onclick = () => viewProgram(doc.id);
+                
+                item.innerHTML = `
+                    <h3>${data.title}</h3>
+                    <p>Click to view full code & video explanation</p>
+                `;
+                container.appendChild(item);
+            });
+        } catch (err) {
+            container.innerHTML = "Error loading programming data.";
+        }
+    }
+
+    async function viewProgram(slug) {
+        listView.style.display = "none";
+        fullView.style.display = "block";
+        window.scrollTo(0, 0);
+
+        try {
+            const docRef = doc(db, "programming", slug);
+            const snap = await getDoc(docRef);
+
+            if (snap.exists()) {
+                const data = snap.data();
+                document.getElementById("headingTitle").innerText = data.title;
+                document.getElementById("contentBody").innerText = data.code;
+                
+                // PDF மற்றும் YouTube லிங்குகளைக் கையாளுதல்
+                const pdfBtn = document.getElementById("pdfLink");
+                const ytBtn = document.getElementById("ytLink");
+
+                if(data.pdfLink) { pdfBtn.href = data.pdfLink; pdfBtn.style.display = "inline-block"; }
+                else { pdfBtn.style.display = "none"; }
+
+                if(data.youtubeLink) { ytBtn.href = data.youtubeLink; ytBtn.style.display = "inline-block"; }
+                else { ytBtn.style.display = "none"; }
+
+                document.title = data.title + " | Programming | Kalvi Vaanam";
+            }
+        } catch (err) {
+            alert("Error loading program content");
+        }
+    }
+
+    window.showList = function() {
+        fullView.style.display = "none";
+        listView.style.display = "block";
+        document.title = "புரோகிராமிங் | Kalvi Vaanam";
+    }
+
+    loadPrograms();
+</script>
+
+<script>    
+function openMenu(){ document.getElementById("menu").style.left="0"; }    
+function closeMenu(){ document.getElementById("menu").style.left="-100%"; }    
+</script>    
+    
+</body>    
+</html>
