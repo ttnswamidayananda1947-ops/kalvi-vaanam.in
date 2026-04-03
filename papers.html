@@ -79,7 +79,6 @@ body {
     margin:30px auto;      
 }      
     
-/* PDF Card Style */
 .item-box{      
     background: white;
     margin-bottom:15px;      
@@ -161,7 +160,6 @@ body {
     border-top: 1px solid #eee;
 }      
 
-/* Loading Animation */
 .loading-dots:after {
   content: ' .';
   animation: dots 1s steps(5, end) infinite;}
@@ -218,14 +216,26 @@ const firebaseConfig = {
     
 const app = initializeApp(firebaseConfig);      
 const db = getFirestore(app);      
-    
+
+// ✨ CLEAN URL & PARAMETERS LOGIC ✨
+const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);      
-const classId = params.get("class");      
-const subject = params.get("subject");
-const materialType = params.get("type"); 
+
+// ஸ்ட்ரக்சர்: /papers/class/subject/type
+const classId = pathParts[2] || params.get("class");      
+const subject = pathParts[3] || params.get("subject");
+const materialType = pathParts[4] || params.get("type"); 
+
+// ✨ AUTO-CLEAN: பழைய URL-ஐ அழகாக மாற்றும்
+if (window.location.search.includes('class=')) {
+    const cleanPath = `/papers/${classId}/${subject}${materialType ? '/' + materialType : ''}`;
+    window.history.replaceState({}, '', cleanPath);
+}
     
-document.title = classId + "th " + subject + " - " + (materialType === 'study' ? 'Materials' : 'Papers');      
-document.getElementById("pageTitle").innerText = classId + "th " + subject.toUpperCase();      
+if(classId && subject) {
+    document.title = classId + "th " + subject + " - " + (materialType === 'study' ? 'Materials' : 'Papers');      
+    document.getElementById("pageTitle").innerText = classId + "th " + subject.toUpperCase();      
+}
     
 let allDocs = [];      
 let expanded = false;      
@@ -234,6 +244,11 @@ async function loadPDFs() {
     const toggleBtn = document.getElementById("toggleBtn");
     const contentDiv = document.getElementById("content");
     
+    if(!classId || !subject) {
+        contentDiv.innerHTML = "<p style='text-align:center;'>Invalid Parameters.</p>";
+        return;
+    }
+
     const pdfRef = collection(db,"classes",classId,"subjects",subject,"pdfs");
     
     let q;
@@ -281,12 +296,13 @@ function renderItems(){
     
         const slug = data.slug || data.id; 
     
+        // இங்கே டவுன்லோட் லிங்க்கும் கிளீன் ஸ்ட்ரக்சரில் இருக்கும்
         div.innerHTML=`      
             <div class="info-part">      
                 <span class="number">${index+1}</span>      
                 <span class="title-text">${data.name}</span>      
             </div>      
-            <a class="download-link" href="seo.html?class=${classId}&subject=${subject}&slug=${slug}">View</a>      
+            <a class="download-link" href="/download/${classId}/${subject}/${slug}">View</a>      
         `;      
     
         contentDiv.appendChild(div);      
