@@ -3,7 +3,11 @@
 <head>  
 <meta charset="UTF-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Kalvi Vaanam | Subjects</title>  
+
+<title id="metaTitle">Kalvi Vaanam | Subjects</title>  
+<meta name="description" id="metaDesc" content="Select your subject to download Tamil Nadu State Board study materials and question papers.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" id="canonicalTag" href="">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
   
@@ -73,7 +77,6 @@ body {
 .side-menu a:hover { background: #e3f2fd; color: #0d47a1; }
 .close-btn{ font-size:26px; cursor:pointer; text-align:right; color: #d32f2f; margin-bottom: 20px; }  
 
-/* Subject Container Style */
 .subject-box{  
     width:90%;  
     max-width:500px;  
@@ -163,17 +166,34 @@ function openMenu(){ document.getElementById("menu").style.left="0"; }
 function closeMenu(){ document.getElementById("menu").style.left="-100%"; }  
   
 document.getElementById("year").textContent = new Date().getFullYear();  
-  
+
+// ✨ CLEAN URL & PATH PARAMETERS LOGIC ✨
+const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);  
-const classId = params.get("class");  
+
+// ஸ்ட்ரக்சர்: /subjects/class
+const classId = pathParts[2] || params.get("class");  
+
+// ✨ AUTO-CLEAN: அட்ரஸ் பாரில் பழைய URL-ஐ புதிய கிளீன் லிங்க்காக மாற்றும்
+if (window.location.search.includes('class=')) {
+    const cleanPath = `/subjects/${classId}`;
+    window.history.replaceState({}, '', cleanPath);
+}
   
 // Title & Heading Update
 if(classId) {
-    document.title = classId + "th Subjects – Kalvi Vaanam";  
+    const pageTitle = classId + "th Subjects | TN Board | Kalvi Vaanam";
+    const pageDesc = `Download Class ${classId}th Tamil Nadu State Board subjects study materials, question papers and guides from Kalvi Vaanam.`;
+    
+    document.title = pageTitle;  
+    document.getElementById("metaTitle").innerText = pageTitle;
+    document.getElementById("metaDesc").setAttribute("content", pageDesc);
+    document.getElementById("canonicalTag").href = window.location.origin + "/subjects/" + classId;
+
     document.getElementById("classTitle").innerText = "Kalvi Vaanam - " + classId + "th Std";  
     document.getElementById("containerHeading").innerText = "Class " + classId + " - Subjects";
 } else {
-    window.location.href = "index.html";
+    window.location.href = "/index.html";
 }
   
 let subjects = [];  
@@ -204,7 +224,8 @@ const container = document.getElementById("subjectContainer");
 subjects.forEach(sub => {  
     const a = document.createElement("a");  
     a.innerHTML = `<span style="margin-right:10px;">${sub.icon}</span> ${sub.name}`;  
-    a.href = "material.html?class=" + classId + "&subject=" + sub.key;  
+    // பட்டன் லிங்க்கும் கிளீன் ஸ்ட்ரக்சரில் இருக்கும்
+    a.href = `/material/${classId}/${sub.key}`;  
     container.appendChild(a);  
 });  
 </script>  
