@@ -3,7 +3,12 @@
 <head>  
 <meta charset="UTF-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Select Material Type | Kalvi Vaanam</title>  
+
+<title id="metaTitle">Select Material Type | Kalvi Vaanam</title>  
+<meta name="description" id="metaDesc" content="Download Tamil Nadu State Board Class 10, 11, 12 Question Papers and Study Materials. Best educational resource for students.">
+<meta name="keywords" content="TN Schools, Question Papers, Study Materials, 10th, 11th, 12th, Kalvi Vaanam, Exam Preparation">
+<meta name="robots" content="index, follow">
+<link rel="canonical" id="canonicalTag" href="">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
 
@@ -146,7 +151,6 @@ body {
     color: #777;
 }  
 
-/* பட்டன் மீது வைக்கும்போது உள்ளிருக்கும் சிறிய எழுத்துக்கள் வெள்ளையாக மாற */
 .material-btn:hover span { color: #bbdefb; }
 
 </style>  
@@ -191,22 +195,42 @@ body {
 <script>  
 function openMenu(){ document.getElementById("menu").style.left="0"; }  
 function closeMenu(){ document.getElementById("menu").style.left="-100%"; }  
-  
+
+// ✨ CLEAN URL & PATH PARAMETERS LOGIC ✨
+const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);  
-const classId = params.get("class");  
-const subjectId = params.get("subject");  
+
+// ஸ்ட்ரக்சர்: /material/class/subject
+const classId = pathParts[2] || params.get("class");  
+const subjectId = pathParts[3] || params.get("subject");  
+
+// ✨ AUTO-CLEAN: அட்ரஸ் பாரில் பழைய URL-ஐ புதிய கிளீன் லிங்க்காக மாற்றும்
+if (window.location.search.includes('class=')) {
+    const cleanPath = `/material/${classId}/${subjectId}`;
+    window.history.replaceState({}, '', cleanPath);
+}
 
 if(classId && subjectId) {
-    // வகுப்பை பொறுத்து பெயரை அழகாக்குதல் (எ.கா: 12th Std)
     let displayClass = classId;
     if(!isNaN(classId)) displayClass = classId + "th Std";
 
+    // SEO Meta & Dynamic Content Update
+    const pageTitle = `${displayClass} ${subjectId.toUpperCase()} Materials | Kalvi Vaanam`;
+    const pageDesc = `Get Class ${displayClass} ${subjectId} Question Papers and Study Materials for Tamil Nadu State Board. Free PDF downloads.`;
+    
+    document.title = pageTitle;
+    document.getElementById("metaTitle").innerText = pageTitle;
+    document.getElementById("metaDesc").setAttribute("content", pageDesc);
+    document.getElementById("canonicalTag").href = window.location.origin + "/material/" + classId + "/" + subjectId;
+
     document.getElementById("breadCrumb").innerHTML = "📍 " + displayClass + " ➔ " + subjectId.toUpperCase();
     
-    document.getElementById("qnBtn").href = `papers.html?class=${classId}&subject=${subjectId}&type=question`;
-    document.getElementById("studyBtn").href = `papers.html?class=${classId}&subject=${subjectId}&type=study`;
+    // பட்டன் லிங்க்குகளும் கிளீன் ஸ்ட்ரக்சரில் இருக்கும்
+    document.getElementById("qnBtn").href = `/papers/${classId}/${subjectId}/question`;
+    document.getElementById("studyBtn").href = `/papers/${classId}/${subjectId}/study`;
 } else {
-    window.location.href = "index.html"; 
+    // தகவல்கள் இல்லையென்றால் ஹோம் பேஜிற்கு அனுப்பவும்
+    window.location.href = "/index.html"; 
 }
 </script>  
   
