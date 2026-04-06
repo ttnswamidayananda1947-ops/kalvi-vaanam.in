@@ -1,1 +1,11 @@
+# 1. Subjects Page (Class based)
+/subjects/:class  /subjects.html?class=:class  200
+
+# 2. Material Page (Class & Subject based)
+/material/:class/:subject  /material.html?class=:class&subject=:subject  200
+
+# 3. Papers Page (Class, Subject & Material Type based)
+/papers/:class/:subject/:type  /papers.html?class=:class&subject=:subject&type=:type  200
+
+# 4. SEO/Download Page (Final Link based)
 /download/:class/:subject/:slug  /seo.html?class=:class&subject=:subject&slug=:slug  200
