@@ -20,6 +20,9 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 .delete-btn{background:#e53935;margin-top:10px;}
 .article-section{margin-top:30px; border-top: 4px solid #2e7d32; padding-top:20px; background: #f1f8e9; padding: 15px; border-radius: 8px;}
 .prog-section{margin-top:30px; border-top: 4px solid #6a1b9a; padding-top:20px; background: #f3e5f5; padding: 15px; border-radius: 8px;}
+/* New Style for Drive Button */
+.drive-tool { display: flex; gap: 5px; margin-bottom: 10px; }
+.drive-btn { background: #34a853; font-size: 12px; padding: 8px; width: auto; flex: 1; }
 </style>
 </head>
 
@@ -56,6 +59,10 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 
     <input type="text" id="pdfName" placeholder="PDF Name">
     <input type="text" id="pdfLink" placeholder="PDF Link">
+    <div class="drive-tool">
+        <button class="drive-btn" onclick="makeDriveDirect('pdfLink')">Convert to Drive Direct ☁️</button>
+    </div>
+    
     <textarea id="pdfDesc" placeholder="Description (Tamil + English mix)"></textarea>
     <input type="text" id="slugInput" placeholder="Slug (Optional)">
 
@@ -66,6 +73,9 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
         <input type="text" id="progTitle" placeholder="Program Title">
         <textarea id="progCode" style="height: 150px; font-family: monospace;" placeholder="Paste Full Program Code Here..."></textarea>
         <input type="text" id="progPdfLink" placeholder="PDF Download Link">
+        <div class="drive-tool">
+            <button class="drive-btn" style="background:#6a1b9a;" onclick="makeDriveDirect('progPdfLink')">Drive Direct ☁️</button>
+        </div>
         <input type="text" id="progYtLink" placeholder="YouTube Video Link">
         <button style="background: #6a1b9a;" onclick="saveProgramming()">Save Program 🚀</button>
     </div>
@@ -113,6 +123,24 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Function to extract ID and format Drive Link
+function makeDriveDirect(inputId) {
+    let input = document.getElementById(inputId);
+    let url = input.value;
+    let fileId = "";
+
+    if (url.includes("id=")) {
+        fileId = url.split("id=")[1].split("&")[0];
+    } else if (url.includes("/d/")) {
+        fileId = url.split("/d/")[1].split("/")[0];
+    } else {
+        alert("Invalid Drive Link! Paste full link first.");
+        return;
+    }
+
+    input.value = `https://drive.usercontent.google.com/download?id=${fileId}&export=download`;
+}
 
 function createSlug(text){
     return text.toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g,"-");
