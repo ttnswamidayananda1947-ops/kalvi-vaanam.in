@@ -34,11 +34,14 @@ body {
     overflow:hidden;      
     background:#ffffff;      
     border: 2px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }      
 .logo-box img{      
     width:100%;      
-    height:100%;      
-    object-fit:cover;      
+    height:auto;      
+    display: block;
 }      
 .site-name{      
     font-size:20px;      
@@ -138,7 +141,7 @@ body {
 }
     
 .more-btn{      
-    display:block;      
+    display:none;      
     margin:30px auto;      
     padding:12px 30px;      
     background:#0d47a1;      
@@ -176,7 +179,9 @@ body {
     
 <div class="header">      
     <div class="logo-area">      
-        <div class="logo-box"><img src="logo.png"></div>      
+        <div class="logo-box">
+            <img src="logo.png" alt="Logo">
+        </div>      
         <div class="site-name" id="pageTitle">Kalvi Vaanam</div>      
     </div>      
     <div class="menu-btn" onclick="openMenu()">☰</div>      
@@ -195,7 +200,7 @@ body {
 <div class="content-area" id="content">
     <p id="loadingMsg" style="text-align:center; font-weight: bold; color: #0d47a1;" class="loading-dots">Loading PDFs</p>
 </div>      
-<button class="more-btn" id="toggleBtn" style="display:none;">More</button>      
+<button class="more-btn" id="toggleBtn">Load More</button>      
     
 <div class="footer">      
     <p>© <span id="year"></span> Kalvi Vaanam</p>      
@@ -217,18 +222,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);      
 const db = getFirestore(app);      
 
-// ✨ CLEAN URL & PARAMETERS LOGIC ✨
 const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);      
 
-// ஸ்ட்ரக்சர்: /papers/class/subject/type
 const classId = pathParts[2] || params.get("class");      
 const subject = pathParts[3] || params.get("subject");
 const materialType = pathParts[4] || params.get("type"); 
+// தற்போதைய எண்ணிக்கையை URL-லிருந்து எடுக்கும் (Default 5)
+let currentLimit = parseInt(params.get("limit")) || 5; 
 
-// ✨ AUTO-CLEAN: பழைய URL-ஐ அழகாக மாற்றும்
 if (window.location.search.includes('class=')) {
-    const cleanPath = `/papers/${classId}/${subject}${materialType ? '/' + materialType : ''}`;
+    const cleanPath = `/papers/${classId}/${subject}${materialType ? '/' + materialType : ''}?limit=${currentLimit}`;
     window.history.replaceState({}, '', cleanPath);
 }
     
@@ -236,9 +240,6 @@ if(classId && subject) {
     document.title = classId + "th " + subject + " - " + (materialType === 'study' ? 'Materials' : 'Papers');      
     document.getElementById("pageTitle").innerText = classId + "th " + subject.toUpperCase();      
 }
-    
-let allDocs = [];      
-let expanded = false;      
     
 async function loadPDFs() {      
     const toggleBtn = document.getElementById("toggleBtn");
@@ -250,70 +251,49 @@ async function loadPDFs() {
     }
 
     const pdfRef = collection(db,"classes",classId,"subjects",subject,"pdfs");
-    
-    let q;
-    if(materialType) {
-        q = query(pdfRef, where("type", "==", materialType));
-    } else {
-        q = pdfRef;
-    }
+    let q = materialType ? query(pdfRef, where("type", "==", materialType)) : pdfRef;
 
     try {
         const snapshot = await getDocs(q);      
-        
-        allDocs = [];      
-        snapshot.forEach(doc=>{      
-            allDocs.push({      
-                id:doc.id,      
-                ...doc.data()      
-            });      
-        });      
+        let allDocs = [];      
+        snapshot.forEach(doc => { allDocs.push({ id: doc.id, ...doc.data() }); });      
         
         if(allDocs.length === 0) {
-            contentDiv.innerHTML = "<div style='text-align:center; padding: 40px;'><p>No PDFs found here.</p><a href='index.html' style='color:#0d47a1; font-weight:bold;'>Go Home</a></div>";
+            contentDiv.innerHTML = "<div style='text-align:center; padding: 40px;'><p>No PDFs found here.</p></div>";
         } else {
-            renderItems();      
-            if(allDocs.length > 5){      
-                toggleBtn.style.display="block";      
+            // குறிப்பிட்ட எண்ணிக்கையை மட்டும் காட்டும்
+            const itemsToShow = allDocs.slice(0, currentLimit);
+            contentDiv.innerHTML = "";
+            
+            itemsToShow.forEach((data, index) => {
+                const div = document.createElement("div");
+                div.className = "item-box";
+                const slug = data.slug || data.id; 
+                div.innerHTML = `
+                    <div class="info-part">
+                        <span class="number">${index + 1}</span>
+                        <span class="title-text">${data.name}</span>
+                    </div>
+                    <a class="download-link" href="/download/${classId}/${subject}/${slug}">View</a>
+                `;
+                contentDiv.appendChild(div);
+            });
+
+            // இன்னும் டேட்டாக்கள் இருந்தால் மட்டும் பட்டனைக் காட்டும்
+            if (allDocs.length > currentLimit) {
+                toggleBtn.style.display = "block";
             }
         }
     } catch (error) {
-        console.error("Error fetching PDFs: ", error);
-        contentDiv.innerHTML = "<p style='text-align:center; color: red;'>Something went wrong. Refresh the page.</p>";
+        contentDiv.innerHTML = "<p style='text-align:center; color: red;'>Error Loading Data.</p>";
     }
 }      
     
-function renderItems(){      
-    const contentDiv = document.getElementById("content");      
-    const toggleBtn = document.getElementById("toggleBtn");      
-    contentDiv.innerHTML="";      
-    
-    const itemsToShow = expanded ? allDocs : allDocs.slice(0,5);      
-    
-    itemsToShow.forEach((data,index)=>{      
-        const div=document.createElement("div");      
-        div.className="item-box";      
-    
-        const slug = data.slug || data.id; 
-    
-        // இங்கே டவுன்லோட் லிங்க்கும் கிளீன் ஸ்ட்ரக்சரில் இருக்கும்
-        div.innerHTML=`      
-            <div class="info-part">      
-                <span class="number">${index+1}</span>      
-                <span class="title-text">${data.name}</span>      
-            </div>      
-            <a class="download-link" href="/download/${classId}/${subject}/${slug}">View</a>      
-        `;      
-    
-        contentDiv.appendChild(div);      
-    });      
-    
-    toggleBtn.textContent = expanded ? "Show Less" : "Load More";      
-}      
-    
-document.getElementById("toggleBtn").addEventListener("click",()=>{      
-    expanded=!expanded;      
-    renderItems();      
+document.getElementById("toggleBtn").addEventListener("click", () => {      
+    // எண்ணிக்கையை 5 அதிகரித்து பக்கத்தை ரீப்ரெஷ் செய்யும்
+    let nextLimit = currentLimit + 5;
+    const newUrl = `${window.location.origin}${window.location.pathname}?limit=${nextLimit}`;
+    window.location.href = newUrl;
 });      
     
 loadPDFs();      
