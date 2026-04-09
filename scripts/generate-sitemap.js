@@ -5,8 +5,7 @@ const PROJECT_ID = "kalvi-vaanam-db";
 const BASE_URL = "https://kalvivaanam.in";
 
 async function run() {
-  // சப்-கலெக்ஷன்களில் உள்ள அனைத்து 'pdfs' ஆவணங்களையும் எடுக்க Structured Query பயன்படுத்துகிறோம்
-  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`;
+  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery?key=${process.env.FIRESTORE_API_KEY}`;
   
   const queryBody = {
     structuredQuery: {
@@ -16,17 +15,19 @@ async function run() {
 
   const res = await fetch(url, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(queryBody)
   });
   
   const data = await res.json();
 
   let urls = "";
+  let count = 0;
+
   if (Array.isArray(data)) {
     data.forEach(item => {
       if (item.document) {
         const f = item.document.fields;
-        // உங்கள் டேட்டாபேஸில் உள்ள ஃபீல்ட் பெயர்கள் இங்கே சரியாக இருக்க வேண்டும்
         const className = f.class?.stringValue || "";
         const subject = encodeURIComponent(f.subject?.stringValue || "");
         const slug = f.slug?.stringValue || f.id?.stringValue || "";
@@ -38,6 +39,7 @@ async function run() {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>`;
+          count++;
         }
       }
     });
@@ -50,7 +52,7 @@ async function run() {
 </urlset>`;
 
   fs.writeFileSync("./sitemap.xml", sitemap);
-  console.log("Sitemap Updated with " + (data.length - 1) + " links!");
+  console.log(`Sitemap Updated with ${count} PDF links!`);
 }
 
 run();
