@@ -15,11 +15,29 @@ const CLASS_SUBJECTS = {
   "12": ["tamil","english","maths","physics","chemistry","computerscience"]
 };
 
-async function getPdfs(className, subject) {
-  const url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/classes/${className}/subjects/${subject}/pdfs?key=${API_KEY}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data.documents || [];
+async function getAllPdfs(className, subject) {
+  let allDocs = [];
+  let nextPageToken = null;
+
+  do {
+    let url = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/classes/${className}/subjects/${subject}/pdfs?key=${API_KEY}&pageSize=300`;
+    
+    if (nextPageToken) {
+      url += `&pageToken=${nextPageToken}`;
+    }
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.documents) {
+      allDocs = allDocs.concat(data.documents);
+    }
+
+    nextPageToken = data.nextPageToken || null;
+
+  } while (nextPageToken);
+
+  return allDocs;
 }
 
 async function run() {
@@ -28,7 +46,7 @@ async function run() {
 
   for (const [className, subjects] of Object.entries(CLASS_SUBJECTS)) {
     for (const subject of subjects) {
-      const docs = await getPdfs(className, subject);
+      const docs = await getAllPdfs(className, subject);
       docs.forEach(doc => {
         const f = doc.fields;
         const slug = f?.slug?.stringValue || f?.id?.stringValue || "";
