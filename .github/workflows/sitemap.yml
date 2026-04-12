@@ -26,6 +26,6 @@ jobs:
         run: |
           git config --global user.name 'Sitemap Bot'
           git config --global user.email 'bot@kalvivaanam.in'
-          git add sitemap.xml
+          git add sitemap*.xml
           git commit -m "Automated sitemap update [skip ci]" || exit 0
           git push
