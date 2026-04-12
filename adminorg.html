@@ -20,7 +20,6 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 .delete-btn{background:#e53935;margin-top:10px;}
 .article-section{margin-top:30px; border-top: 4px solid #2e7d32; padding-top:20px; background: #f1f8e9; padding: 15px; border-radius: 8px;}
 .prog-section{margin-top:30px; border-top: 4px solid #6a1b9a; padding-top:20px; background: #f3e5f5; padding: 15px; border-radius: 8px;}
-/* New Style for Drive Button */
 .drive-tool { display: flex; gap: 5px; margin-bottom: 10px; }
 .drive-btn { background: #34a853; font-size: 12px; padding: 8px; width: auto; flex: 1; }
 </style>
@@ -49,6 +48,10 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
         <option>science</option><option>social</option>
         <option>physics</option><option>chemistry</option>
         <option>computerscience</option>
+        <option>computer application</option>
+        <option>accountancy</option>
+        <option>statistics</option>
+        <option>biology</option>
     </select>
 
     <select id="typeSelect">
@@ -124,7 +127,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Function to extract ID and format Drive Link
 function makeDriveDirect(inputId) {
     let input = document.getElementById(inputId);
     let url = input.value;
