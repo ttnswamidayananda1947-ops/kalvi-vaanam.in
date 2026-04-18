@@ -117,6 +117,7 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
+// உங்கள் சரியான Config விவரங்கள்
 const firebaseConfig = {
     apiKey: "AIzaSyDADvn4P8g_Dk6fraPNk56Ansrfx5ezgJU",
     authDomain: "kalvi-vaanam-db.firebaseapp.com",
@@ -150,13 +151,16 @@ function createSlug(text){
 
 function googleLogin(){
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+    auth.signInWithPopup(provider).catch(err => alert("Login Error: " + err.message));
 }
 
 auth.onAuthStateChanged(user=>{
     if(user && user.email === "ttnswamidayananda1947@gmail.com"){
         document.getElementById("loginBox").style.display="none";
         document.getElementById("dashboard").style.display="block";
+    }else if(user){
+        alert("அனுமதிக்கப்படாத மின்னஞ்சல்: " + user.email);
+        auth.signOut();
     }else{
         document.getElementById("loginBox").style.display="block";
         document.getElementById("dashboard").style.display="none";
@@ -165,7 +169,8 @@ auth.onAuthStateChanged(user=>{
 
 function logout(){ auth.signOut(); }
 
-function savePDF(){
+// மெயின் மாற்றம்: async/await பயன்படுத்தி வரிசையாகச் சேமித்தல்
+async function savePDF(){
     const classVal = document.getElementById("classSelect").value;
     const subjectVal = document.getElementById("subjectSelect").value;
     const typeVal = document.getElementById("typeSelect").value;
@@ -177,11 +182,25 @@ function savePDF(){
     if(!slug) slug = createSlug(name);
     if(!classVal || !subjectVal || !typeVal || !name || !link){ alert("Please fill all fields!"); return; }
 
-    db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs")
-    .doc(slug).set({
-        name: name, link: link, description: desc, type: typeVal, slug: slug,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(()=>{ showSuccess(); clearPDFFields(); });
+    try {
+        // படி 1: Class மற்றும் Subject டாக்குமெண்ட் இருப்பதை உறுதி செய்தல்
+        await db.collection("classes").doc(classVal).set({ name: classVal }, { merge: true });
+        await db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).set({ name: subjectVal }, { merge: true });
+
+        // படி 2: PDF தகவலைச் சேமித்தல்
+        await db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs")
+        .doc(slug).set({
+            name: name, link: link, description: desc, type: typeVal, slug: slug,
+            class: classVal, subject: subjectVal,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        showSuccess();
+        clearPDFFields();
+    } catch (err) {
+        console.error(err);
+        alert("சேமிப்பதில் எர்ரர்: " + err.message);
+    }
 }
 
 function clearPDFFields(){
@@ -189,33 +208,31 @@ function clearPDFFields(){
     document.getElementById("pdfDesc").value=""; document.getElementById("slugInput").value="";
 }
 
-function saveProgramming(){
+async function saveProgramming(){
     const title = document.getElementById("progTitle").value;
     const code = document.getElementById("progCode").value;
     const pdfLink = document.getElementById("progPdfLink").value;
     const ytLink = document.getElementById("progYtLink").value;
     
     if(!title || !code){ alert("Title and Program Code are required!"); return; }
-    
     const slug = createSlug(title);
 
-    db.collection("programming").doc(slug).set({
-        title: title,
-        code: code,
-        pdfLink: pdfLink,
-        youtubeLink: ytLink,
-        slug: slug,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
+    try {
+        await db.collection("programming").doc(slug).set({
+            title: title, code: code, pdfLink: pdfLink, youtubeLink: ytLink, slug: slug,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
         showSuccess();
         document.getElementById("progTitle").value = "";
         document.getElementById("progCode").value = "";
         document.getElementById("progPdfLink").value = "";
         document.getElementById("progYtLink").value = "";
-    }).catch(err => alert("Error: " + err.message));
+    } catch (err) {
+        alert("Programming Save Error: " + err.message);
+    }
 }
 
-function saveArticle(){
+async function saveArticle(){
     const title = document.getElementById("artTitle").value;
     const category = document.getElementById("artCategory").value;
     const content = document.getElementById("artContent").value;
@@ -224,16 +241,19 @@ function saveArticle(){
     if(!title || !content){ alert("Title and Content are required!"); return; }
     if(!slug) slug = createSlug(title);
 
-    db.collection("articles").doc(slug).set({
-        title: title, category: category, content: content, slug: slug,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
+    try {
+        await db.collection("articles").doc(slug).set({
+            title: title, category: category, content: content, slug: slug,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
         showSuccess();
         document.getElementById("artTitle").value = "";
         document.getElementById("artCategory").value = "";
         document.getElementById("artContent").value = "";
         document.getElementById("artSlug").value = "";
-    }).catch(err => alert("Article Error: " + err.message));
+    } catch (err) {
+        alert("Article Save Error: " + err.message);
+    }
 }
 
 function showSuccess(){
@@ -246,6 +266,8 @@ function viewPDFs(){
     const classVal = document.getElementById("viewClass").value;
     const subjectVal = document.getElementById("viewSubject").value;
     const area = document.getElementById("viewArea");
+    if(!classVal || !subjectVal) { alert("Select Class and Subject!"); return; }
+
     area.innerHTML="Loading...";
     db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").get()
     .then(snapshot=>{
@@ -255,17 +277,19 @@ function viewPDFs(){
             const data = doc.data();
             area.innerHTML += `<div><b>${data.name}</b> (${data.type})<br>Slug: ${doc.id}<hr></div>`;
         });
-    });
+    }).catch(err => alert("View Error: " + err.message));
 }
 
 function loadDeleteList(){
     const classVal = document.getElementById("deleteClass").value;
     const subjectVal = document.getElementById("deleteSubject").value;
     const pdfSelect = document.getElementById("deletePdf");
+    if(!classVal || !subjectVal) return;
+
     pdfSelect.innerHTML="<option>Loading...</option>";
     db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").get()
     .then(snapshot=>{
-        pdfSelect.innerHTML="";
+        pdfSelect.innerHTML="<option value=''>Select PDF to Delete</option>";
         snapshot.forEach(doc=>{
             const option = document.createElement("option");
             option.value = doc.id; option.text = doc.data().name;
@@ -278,16 +302,22 @@ function deletePDF(){
     const classVal = document.getElementById("deleteClass").value;
     const subjectVal = document.getElementById("deleteSubject").value;
     const slug = document.getElementById("deletePdf").value;
-    if(!slug || slug === "Loading..."){ alert("Select a PDF"); return; }
-    if(!confirm("Delete?")) return;
+    if(!slug || slug === "" || slug === "Loading..."){ alert("Select a PDF"); return; }
+    if(!confirm("நிச்சயமாக அழிக்க வேண்டுமா?")) return;
+    
     db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs").doc(slug).delete()
-    .then(()=>{ alert("Deleted! ✅"); loadDeleteList(); });
+    .then(()=>{ alert("Deleted! ✅"); loadDeleteList(); })
+    .catch(err => alert("Delete Error: " + err.message));
 }
 
-document.getElementById("viewClass").innerHTML = document.getElementById("classSelect").innerHTML;
-document.getElementById("viewSubject").innerHTML = document.getElementById("subjectSelect").innerHTML;
-document.getElementById("deleteClass").innerHTML = document.getElementById("classSelect").innerHTML;
-document.getElementById("deleteSubject").innerHTML = document.getElementById("subjectSelect").innerHTML;
+// Dropdown Sync
+const classHTML = document.getElementById("classSelect").innerHTML;
+const subjectHTML = document.getElementById("subjectSelect").innerHTML;
+document.getElementById("viewClass").innerHTML = classHTML;
+document.getElementById("viewSubject").innerHTML = subjectHTML;
+document.getElementById("deleteClass").innerHTML = classHTML;
+document.getElementById("deleteSubject").innerHTML = subjectHTML;
+
 document.getElementById("deleteClass").onchange = loadDeleteList;
 document.getElementById("deleteSubject").onchange = loadDeleteList;
 
