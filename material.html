@@ -13,11 +13,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
 
 <style>  
-/* பொதுவான மாற்றங்கள் */
 body { 
     margin:0; 
     font-family: 'Poppins', 'Hind Madurai', sans-serif; 
-    background:#f9fbff; /* லேசான நீல நிற பின்னணி */
+    background:#f9fbff;
 }  
 
 .header{ 
@@ -25,7 +24,7 @@ body {
     justify-content:space-between; 
     align-items:center; 
     padding:15px 20px; 
-    background: linear-gradient(135deg, #0d47a1, #1976d2); /* Gradient நிறம் */
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
     color:white; 
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }  
@@ -42,7 +41,6 @@ body {
 .logo-box img{ width:100%; height:100%; object-fit:cover; }  
 .site-name{ font-size:22px; font-weight:bold; letter-spacing: 1px; }  
 
-/* Side Menu Style */
 .side-menu{ 
     position:fixed; 
     top:0; 
@@ -68,7 +66,6 @@ body {
 .side-menu a:hover { background: #e3f2fd; color: #0d47a1; }
 .close-btn{ font-size:26px; cursor:pointer; text-align:right; color: #d32f2f; margin-bottom: 20px; }  
 
-/* Material Box மேம்படுத்தப்பட்டுள்ளது */
 .material-box{ 
     width:90%; 
     max-width:480px; 
@@ -100,7 +97,7 @@ body {
 }
 
 .material-btn{ 
-    display:flex; /* Flexbox பயன்படுத்தி icon மற்றும் text சீராக வைக்கப்பட்டுள்ளது */
+    display:flex;
     flex-direction: column;
     align-items: center;
     text-decoration:none; 
@@ -133,13 +130,11 @@ body {
     line-height: 1.4;
 }
 
-/* Breadcrumb - வழித்தடம் காட்டும் பகுதி */
 #breadCrumb {
     background: #f1f8ff;
-    padding: 10px;
+    padding: 8px 20px;
     border-radius: 30px;
     display: inline-block;
-    padding: 8px 20px;
 }
 
 .footer{ 
@@ -152,7 +147,6 @@ body {
 }  
 
 .material-btn:hover span { color: #bbdefb; }
-
 </style>  
 </head>  
 <body>  
@@ -167,8 +161,8 @@ body {
   
 <div class="side-menu" id="menu">  
     <div class="close-btn" onclick="closeMenu()">✖</div>  
-    <a href="index.html">🏠 Home</a>  
-    <a href="about-us.html">ℹ️ About Us</a>  
+    <a href="/index.html">🏠 Home</a>  
+    <a href="/about-us.html">ℹ️ About Us</a>  
     <a href="mailto:ttnswamidayananda1947@gmail.com">📧 Contact Us</a>  
 </div>  
   
@@ -196,25 +190,22 @@ body {
 function openMenu(){ document.getElementById("menu").style.left="0"; }  
 function closeMenu(){ document.getElementById("menu").style.left="-100%"; }  
 
-// ✨ CLEAN URL & PATH PARAMETERS LOGIC ✨
+// URL பாரம்மீட்டர்ஸ் எடுக்கும்
 const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);  
 
-// ஸ்ட்ரக்சர்: /material/class/subject
+// Clean URL: /material/6/tamil அல்லது ?class=6&subject=tamil
 const classId = pathParts[2] || params.get("class");  
 const subjectId = pathParts[3] || params.get("subject");  
 
-// ✨ AUTO-CLEAN: அட்ரஸ் பாரில் பழைய URL-ஐ புதிய கிளீன் லிங்க்காக மாற்றும்
 if (window.location.search.includes('class=')) {
-    const cleanPath = `/material/${classId}/${subjectId}`;
-    window.history.replaceState({}, '', cleanPath);
+    window.history.replaceState({}, '', `/material/${classId}/${subjectId}`);
 }
 
 if(classId && subjectId) {
     let displayClass = classId;
     if(!isNaN(classId)) displayClass = classId + "th Std";
 
-    // SEO Meta & Dynamic Content Update
     const pageTitle = `${displayClass} ${subjectId.toUpperCase()} Materials | Kalvi Vaanam`;
     const pageDesc = `Get Class ${displayClass} ${subjectId} Question Papers and Study Materials for Tamil Nadu State Board. Free PDF downloads.`;
     
@@ -222,14 +213,13 @@ if(classId && subjectId) {
     document.getElementById("metaTitle").innerText = pageTitle;
     document.getElementById("metaDesc").setAttribute("content", pageDesc);
     document.getElementById("canonicalTag").href = window.location.origin + "/material/" + classId + "/" + subjectId;
-
     document.getElementById("breadCrumb").innerHTML = "📍 " + displayClass + " ➔ " + subjectId.toUpperCase();
     
-    // பட்டன் லிங்க்குகளும் கிளீன் ஸ்ட்ரக்சரில் இருக்கும்
-    document.getElementById("qnBtn").href = `/papers/${classId}/${subjectId}/question`;
-    document.getElementById("studyBtn").href = `/papers/${classId}/${subjectId}/study`;
+    // ✅ FIX: download.html?class=&subject=&type= format யூஸ் பண்றோம்
+    document.getElementById("qnBtn").href = `/download.html?class=${classId}&subject=${encodeURIComponent(subjectId)}&type=question`;
+    document.getElementById("studyBtn").href = `/download.html?class=${classId}&subject=${encodeURIComponent(subjectId)}&type=study`;
+
 } else {
-    // தகவல்கள் இல்லையென்றால் ஹோம் பேஜிற்கு அனுப்பவும்
     window.location.href = "/index.html"; 
 }
 </script>  
