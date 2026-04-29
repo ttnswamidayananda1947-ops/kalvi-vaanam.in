@@ -4,21 +4,24 @@
 <meta charset="UTF-8">
 <script>
   const path = window.location.pathname;
-  const search = window.location.search;
-  
-  // /subjects/6 → subjects.html?class=6
+
   if (path.startsWith('/subjects/')) {
     const classId = path.split('/')[2];
     window.location.replace('/subjects.html?class=' + classId);
   }
-  // /material/6/tamil → material.html?class=6&subject=tamil
   else if (path.startsWith('/material/')) {
     const parts = path.split('/');
     const classId = parts[2];
     const subject = parts[3];
     window.location.replace('/material.html?class=' + classId + '&subject=' + subject);
   }
-  // /download/6/tamil/slug → download.html?class=6&subject=tamil&slug=slug
+  else if (path.startsWith('/papers/')) {
+    const parts = path.split('/');
+    const classId = parts[2];
+    const subject = parts[3];
+    const type = parts[4];
+    window.location.replace('/download.html?class=' + classId + '&subject=' + subject + '&type=' + type);
+  }
   else if (path.startsWith('/download/')) {
     const parts = path.split('/');
     const classId = parts[2];
