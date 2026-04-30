@@ -80,21 +80,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);      
 const db = getFirestore(app);      
 
-const pathParts = window.location.pathname.split('/'); 
 const params = new URLSearchParams(window.location.search);      
-
-const classId = pathParts[2] || params.get("class");      
-const subject = pathParts[3] || params.get("subject");
-const materialType = pathParts[4] || params.get("type"); 
-
-// ✨ PAGINATION LOGIC: URL-ல் இருந்து எத்தனை டேட்டா காட்ட வேண்டும் என எடுக்கும்
+const classId = params.get("class");      
+const subject = params.get("subject");
+const materialType = params.get("type"); 
 let limitCount = parseInt(params.get("limit")) || 5;
 
-if (window.location.search.includes('class=')) {
-    const cleanPath = `/papers/${classId}/${subject}${materialType ? '/' + materialType : ''}?limit=${limitCount}`;
-    window.history.replaceState({}, '', cleanPath);
-}
-    
 if(classId && subject) {
     document.title = classId + "th " + subject + " - " + (materialType === 'study' ? 'Materials' : 'Papers');      
     document.getElementById("pageTitle").innerText = classId + "th " + subject.toUpperCase();      
@@ -120,7 +111,6 @@ async function loadPDFs() {
         if(allDocs.length === 0) {
             contentDiv.innerHTML = "<div style='text-align:center; padding: 40px;'><p>No PDFs found here.</p><a href='/index.html' style='color:#0d47a1; font-weight:bold;'>Go Home</a></div>";
         } else {
-            // ✨ 5, 10, 15 என டேட்டாவை பிரித்து காட்டுதல்
             const itemsToShow = allDocs.slice(0, limitCount);
             contentDiv.innerHTML="";      
             
@@ -128,17 +118,18 @@ async function loadPDFs() {
                 const div=document.createElement("div");      
                 div.className="item-box";      
                 const slug = data.slug || data.id; 
+
+                // ✅ FIX: seo.html-க்கு redirect
                 div.innerHTML=`      
                     <div class="info-part">      
                         <span class="number">${index+1}</span>      
                         <span class="title-text">${data.name}</span>      
                     </div>      
-                    <a class="download-link" href="/download/${classId}/${subject}/${slug}">View</a>      
+                    <a class="download-link" href="seo.html?class=${classId}&subject=${encodeURIComponent(subject)}&slug=${slug}">View</a>      
                 `;      
                 contentDiv.appendChild(div);      
             });      
             
-            // அடுத்த செட் டேட்டா இருந்தால் மட்டும் பட்டனை காட்டு
             if(allDocs.length > limitCount){      
                 toggleBtn.style.display="block";      
             }
@@ -148,12 +139,10 @@ async function loadPDFs() {
     }
 }      
     
-// ✨ LOAD MORE: கிளிக் செய்தால் பக்கம் ரீஃப்ரெஷ் ஆகி அடுத்த 5 டேட்டா வரும் (Ad Revenue-க்காக)
 document.getElementById("toggleBtn").addEventListener("click",()=>{      
     const nextLimit = limitCount + 5;
-    const currentPath = window.location.pathname;
-    // பக்கம் ரீஃப்ரெஷ் ஆகி அடுத்த லிமிட் உடன் லோடு ஆகும்
-    window.location.href = `${currentPath}?limit=${nextLimit}`;
+    const currentUrl = `papers.html?class=${classId}&subject=${encodeURIComponent(subject)}&type=${materialType}&limit=${nextLimit}`;
+    window.location.href = currentUrl;
 });      
     
 loadPDFs();      
