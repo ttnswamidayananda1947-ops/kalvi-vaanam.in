@@ -86,9 +86,7 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
     <div class="article-section">
         <h3 style="color: #2e7d32; border-color: #2e7d32;">Add Article (SEO)</h3>
         <input type="text" id="artTitle" placeholder="Article Title">
-        <input type="text" id="artCategory" placeholder="Category">
         <textarea id="artContent" style="height: 120px;" placeholder="Full Article Content"></textarea>
-        <input type="text" id="artSlug" placeholder="Article Slug">
         <button style="background: #2e7d32;" onclick="saveArticle()">Save Article ✍️</button>
     </div>
 
@@ -117,7 +115,7 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
-// உங்கள் சரியான Config விவரங்கள்
+// Firebase Config
 const firebaseConfig = {
     apiKey: "AIzaSyDADvn4P8g_Dk6fraPNk56Ansrfx5ezgJU",
     authDomain: "kalvi-vaanam-db.firebaseapp.com",
@@ -169,7 +167,6 @@ auth.onAuthStateChanged(user=>{
 
 function logout(){ auth.signOut(); }
 
-// மெயின் மாற்றம்: async/await பயன்படுத்தி வரிசையாகச் சேமித்தல்
 async function savePDF(){
     const classVal = document.getElementById("classSelect").value;
     const subjectVal = document.getElementById("subjectSelect").value;
@@ -183,11 +180,9 @@ async function savePDF(){
     if(!classVal || !subjectVal || !typeVal || !name || !link){ alert("Please fill all fields!"); return; }
 
     try {
-        // படி 1: Class மற்றும் Subject டாக்குமெண்ட் இருப்பதை உறுதி செய்தல்
         await db.collection("classes").doc(classVal).set({ name: classVal }, { merge: true });
         await db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).set({ name: subjectVal }, { merge: true });
 
-        // படி 2: PDF தகவலைச் சேமித்தல்
         await db.collection("classes").doc(classVal).collection("subjects").doc(subjectVal).collection("pdfs")
         .doc(slug).set({
             name: name, link: link, description: desc, type: typeVal, slug: slug,
@@ -198,7 +193,6 @@ async function savePDF(){
         showSuccess();
         clearPDFFields();
     } catch (err) {
-        console.error(err);
         alert("சேமிப்பதில் எர்ரர்: " + err.message);
     }
 }
@@ -232,25 +226,22 @@ async function saveProgramming(){
     }
 }
 
+// திருத்தப்பட்ட Article சேமிப்பு முறை
 async function saveArticle(){
     const title = document.getElementById("artTitle").value;
-    const category = document.getElementById("artCategory").value;
     const content = document.getElementById("artContent").value;
-    let slug = document.getElementById("artSlug").value.trim();
     
     if(!title || !content){ alert("Title and Content are required!"); return; }
-    if(!slug) slug = createSlug(title);
 
     try {
-        await db.collection("articles").doc(slug).set({
-            title: title, category: category, content: content, slug: slug,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        // slug மற்றும் createdAt நீக்கப்பட்டுள்ளது
+        await db.collection("articles").doc(title).set({
+            title: title, 
+            content: content
         });
         showSuccess();
         document.getElementById("artTitle").value = "";
-        document.getElementById("artCategory").value = "";
         document.getElementById("artContent").value = "";
-        document.getElementById("artSlug").value = "";
     } catch (err) {
         alert("Article Save Error: " + err.message);
     }
@@ -310,7 +301,6 @@ function deletePDF(){
     .catch(err => alert("Delete Error: " + err.message));
 }
 
-// Dropdown Sync
 const classHTML = document.getElementById("classSelect").innerHTML;
 const subjectHTML = document.getElementById("subjectSelect").innerHTML;
 document.getElementById("viewClass").innerHTML = classHTML;
