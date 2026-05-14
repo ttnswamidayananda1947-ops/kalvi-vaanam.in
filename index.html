@@ -216,6 +216,70 @@ body{
 }    
 
 .footer p { color: #777; font-size: 14px; }
+
+/* ── Articles Section Only ── */
+.articles-section {
+    width: 90%;
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+}
+
+.articles-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0d47a1;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #1976d2;
+    text-align: left;
+}
+
+.article-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    border-left: 5px solid #1976d2;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    text-align: left;
+    transition: 0.3s;
+}
+
+.article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(13,71,161,0.12);
+}
+
+.article-card-category {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1976d2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.article-card h3 {
+    font-size: 16px;
+    color: #0d47a1;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.article-card p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+    margin: 0 0 8px 0;
+}
+
+.article-card-meta {
+    font-size: 12px;
+    color: #aaa;
+}
 </style>    
 </head>    
     
@@ -233,7 +297,9 @@ body{
     
 <div class="side-menu" id="menu">    
     <div class="close-btn" onclick="closeMenu()">✖</div>    
-    <a href="index.html">🏠 Home</a>    
+    <a href="index.html">🏠 Home</a>
+    <a href="article.html">✍️ Articles</a>
+    <a href="programming.html">💻 Programming</a>
     <a href="about-us.html">ℹ️ About Us</a>
     <a href="mailto:ttnswamidayananda1947@gmail.com">📧 Contact Us</a>    
     <a href="privacy-policy.html">🛡️ Privacy Policy</a>     
@@ -271,7 +337,13 @@ body{
         </div>
     </div>
     
-</div>    
+</div>
+
+<!-- Articles Section: database-ல் இருக்கும் data மட்டும் இங்கே load ஆகும் -->
+<div class="articles-section">
+    <div class="articles-section-title">📚 சமீபத்திய கட்டுரைகள்</div>
+    <div id="articles-list"></div>
+</div>
     
 <div class="footer">    
     <div class="social-icons">    
@@ -294,7 +366,89 @@ function openMenu(){
 }    
 function closeMenu(){    
     document.getElementById("menu").style.left="-100%";    
-}    
+}
+
+/* ============================================================
+   ARTICLES DATABASE
+   புதிய article சேர்க்க கீழே இந்த format-ல் add பண்ணுங்கள்:
+   {
+       id: 7,
+       title: "உங்கள் Article Title",
+       category: "வகுப்பு / Topic",
+       date: "மே 2025",
+       summary: "சுருக்கமான விளக்கம்...",
+       url: "article.html?id=7"
+   }
+   ============================================================ */
+const ARTICLES_DB = [
+    {
+        id: 1,
+        title: "TNPSC Group 4 தேர்வு வழிகாட்டுதல் 2025",
+        category: "தேர்வு வழிகாட்டுதல்",
+        date: "மே 2025",
+        summary: "TNPSC Group 4 தேர்விற்கு எப்படி தயாரிக்கணும்? என்ன புத்தகங்கள் படிக்கணும்? முழு தகவல் இங்கே காணலாம்.",
+        url: "article.html?id=1"
+    },
+    {
+        id: 2,
+        title: "10ஆம் வகுப்பு கணிதம் — முக்கிய வினாக்கள் 2025",
+        category: "10ஆம் வகுப்பு",
+        date: "ஏப்ரல் 2025",
+        summary: "10th Maths-ல் அதிக மதிப்பெண் எடுக்க இந்த 50 வினாக்களை கட்டாயம் படிக்கவும். Board exam-ல் அடிக்கடி வரும்.",
+        url: "article.html?id=2"
+    },
+    {
+        id: 3,
+        title: "12ஆம் வகுப்பு பிறகு என்ன படிக்கலாம்?",
+        category: "உயர்கல்வி",
+        date: "மார்ச் 2025",
+        summary: "Engineering, Medical, Arts, Science என்று எந்த துறை சரியானது? தகுதி அடிப்படையில் தேர்வு செய்வது எப்படி?",
+        url: "article.html?id=3"
+    },
+    {
+        id: 4,
+        title: "Python Programming — தமிழில் கற்றுக்கொள்வோம்",
+        category: "புரோகிராமிங்",
+        date: "மார்ச் 2025",
+        summary: "Python-ஐ தமிழிலேயே புரிந்துகொள்ளலாம். Variables, Loops, Functions என step-by-step கற்றுத்தரப்படும்.",
+        url: "programming.html?id=1"
+    },
+    {
+        id: 5,
+        title: "NEET 2025 — தமிழக மாணவர்களுக்கான முழு தகவல்",
+        category: "தேர்வு வழிகாட்டுதல்",
+        date: "பிப்ரவரி 2025",
+        summary: "NEET தேர்வு எப்போது நடக்கும்? எத்தனை மதிப்பெண் வேண்டும்? Medical seat எப்படி கிடைக்கும்?",
+        url: "article.html?id=5"
+    },
+    {
+        id: 6,
+        title: "9ஆம் வகுப்பு அறிவியல் — முக்கிய கருத்துகள்",
+        category: "9ஆம் வகுப்பு",
+        date: "ஜனவரி 2025",
+        summary: "9th Science Physics, Chemistry, Biology அனைத்தும் எளிமையான விளக்கத்துடன். தேர்வில் நன்றாக எழுத உதவும்.",
+        url: "article.html?id=6"
+    }
+];
+
+/* Database-ல் இருக்கும் articles மட்டும் render பண்ணும் — வேறு எதுவும் add ஆகாது */
+function loadArticles() {
+    const list = document.getElementById('articles-list');
+    if (!ARTICLES_DB || ARTICLES_DB.length === 0) {
+        list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">விரைவில் கட்டுரைகள் வரும்...</p>';
+        return;
+    }
+    list.innerHTML = ARTICLES_DB.map(function(a) {
+        return '<a class="article-card" href="' + a.url + '">' +
+            '<div class="article-card-category">' + a.category + '</div>' +
+            '<h3>' + a.title + '</h3>' +
+            '<p>' + a.summary + '</p>' +
+            '<div class="article-card-meta">📅 ' + a.date + '</div>' +
+            '</a>';
+    }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', loadArticles);
 </script>    
     
 </body>    
