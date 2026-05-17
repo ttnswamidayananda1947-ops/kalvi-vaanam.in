@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ta">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +30,7 @@ button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;cursor
 <div class="header">Kalvi Vaanam Admin Panel</div>
 
 <div class="container" id="loginBox">
+    <p style="text-align:center; font-size:14px; color:#555;">அட்மின் கணக்கு மூலம் லாகின் செய்யவும்:</p>
     <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
 </div>
 
@@ -147,10 +148,16 @@ function createSlug(text){
     return text.toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g,"-");
 }
 
+// 🛠️ மாற்றம்: பிரவுசர் பிளாக் செய்யாதவாறு Redirect முறையை பயன்படுத்துகிறோம்
 function googleLogin(){
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).catch(err => alert("Login Error: " + err.message));
+    auth.signInWithRedirect(provider).catch(err => alert("Login Error: " + err.message));
 }
+
+// 🛠️ மாற்றம்: பக்கத்திற்கு திரும்பியவுடன் Redirect ரிசல்ட்டை பிடித்து எர்ரர் இருந்தால் காட்டும்
+auth.getRedirectResult().catch(err => {
+    alert("கூகுள் அங்கீகார பிழை: " + err.message);
+});
 
 auth.onAuthStateChanged(user=>{
     if(user && user.email === "ttnswamidayananda1947@gmail.com"){
@@ -226,7 +233,6 @@ async function saveProgramming(){
     }
 }
 
-// திருத்தப்பட்ட Article சேமிப்பு முறை
 async function saveArticle(){
     const title = document.getElementById("artTitle").value;
     const content = document.getElementById("artContent").value;
@@ -234,7 +240,6 @@ async function saveArticle(){
     if(!title || !content){ alert("Title and Content are required!"); return; }
 
     try {
-        // slug மற்றும் createdAt நீக்கப்பட்டுள்ளது
         await db.collection("articles").doc(title).set({
             title: title, 
             content: content
