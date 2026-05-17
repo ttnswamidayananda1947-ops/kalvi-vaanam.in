@@ -8,49 +8,60 @@
 <meta name="description" content="Kalvi Vaanam வழங்கும் கல்வி சார்ந்த கட்டுரைகள்.">
 <meta name="robots" content="index, follow">
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Hind+Madurai:wght@400;700&display=swap" rel="stylesheet">
+
 <style>    
-body{ margin:0; font-family: Arial, sans-serif; background:#f9f9f9; color: #333; }    
+body{ margin:0; font-family: 'Poppins', 'Hind Madurai', sans-serif; background:#f4f7fa; color: #333; }    
     
 /* ✅ HEADER STYLE */
-.header{ display:flex; justify-content:space-between; align-items:center; padding:15px; background:#0d47a1; color:white; }    
-.logo-area{ display:flex; align-items:center; gap:10px; }    
-.logo-box{ width:40px; height:40px; border-radius:50%; overflow:hidden; background:#ffffff; }    
+.header{ display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background: linear-gradient(135deg, #0d47a1, #1976d2); color:white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }    
+.logo-area{ display:flex; align-items:center; gap:12px; }    
+.logo-box{ width:42px; height:42px; border-radius:50%; overflow:hidden; background:#ffffff; border: 2px solid #fff; }    
 .logo-box img{ width:100%; height:100%; object-fit:cover; }    
-.site-name{ font-size:22px; font-weight:bold; }    
+.site-name{ font-size:22px; font-weight:bold; letter-spacing: 1px; }    
 .menu-btn{ font-size:26px; cursor:pointer; }    
     
 /* ✅ SIDE MENU */
-.side-menu{ position:fixed; top:0; left:-100%; width:250px; height:100%; background:#f5f5f5; box-shadow:2px 0 5px rgba(0,0,0,0.2); transition:0.3s; padding:20px; z-index:1000; }    
-.side-menu a{ display:block; margin:20px 0; text-decoration:none; color:#333; font-size:18px; }    
-.close-btn{ font-size:22px; cursor:pointer; text-align:right; }    
+.side-menu{ position:fixed; top:0; left:-100%; width:280px; height:100%; background:#ffffff; box-shadow:5px 0 15px rgba(0,0,0,0.2); transition:0.4s cubic-bezier(0.4, 0, 0.2, 1); padding:30px 20px; z-index:1000; }    
+.side-menu a{ display:block; margin:15px 0; padding:12px; text-decoration:none; color:#333; font-size:17px; border-radius:8px; transition:0.3s; }    
+.side-menu a:hover { background: #e3f2fd; color: #0d47a1; }
+.close-btn{ font-size:26px; cursor:pointer; text-align:right; color:#d32f2f; margin-bottom:20px; }    
     
 /* ✅ ARTICLE LIST STYLE */
 .container{ max-width: 800px; margin: 30px auto; padding: 15px; }
-.list-title{ font-size: 24px; color: #0d47a1; border-left: 5px solid #0d47a1; padding-left: 10px; margin-bottom: 20px; }
+.list-title{ font-size: 24px; color: #0d47a1; border-left: 5px solid #0d47a1; padding-left: 10px; margin-bottom: 25px; font-weight: bold; }
 
 .article-item {
     background: white;
-    padding: 18px;
+    padding: 20px;
     margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     cursor: pointer;
-    transition: 0.2s;
-    border: 1px solid #eee;
+    transition: 0.3s all ease;
+    border: 1px solid #e3f2fd;
 }
-.article-item:hover { transform: translateY(-3px); border-color: #0d47a1; }
-.article-item h3 { margin: 0; color: #0d47a1; font-size: 19px; }
+.article-item:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(13,71,161,0.08); border-color: #0d47a1; }
+.article-item h3 { margin: 0; color: #0d47a1; font-size: 19px; font-weight: 600; }
 
-/* ✅ FULL ARTICLE CONTENT STYLE */
+/* ✅ FULL ARTICLE CONTENT STYLE (ADSENSE FRIENDLY) */
 #fullArticleView { display: none; }
-.article-card{ background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-#artContent{ font-size: 18px; text-align: justify; white-space: pre-wrap; line-height: 1.8; margin-top: 20px; }
+.article-card{ background: #ffffff; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.4; border-bottom: 3px solid #1976d2; padding-bottom: 12px; font-weight: bold; }
 
-.back-link { color: #0d47a1; cursor: pointer; font-weight: bold; display: inline-block; margin-bottom: 15px; background: #e3f2fd; padding: 8px 15px; border-radius: 5px; }
+/* டைனமிக் முறையில் உள்ளே வரும் எலிமெண்ட்களின் வடிவமைப்பு */
+#artContent h2 { color: #0d47a1; font-size: 20px; margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #f0f4f8; padding-bottom: 6px; }
+#artContent h3 { color: #1976d2; font-size: 18px; margin-top: 25px; margin-bottom: 12px; }
+#artContent p { font-size: 16px; line-height: 1.8; color: #444444; margin-bottom: 18px; text-align: left; }
+#artContent ul { padding-left: 20px; margin-bottom: 20px; line-height: 1.8; color: #444444; }
+#artContent li { margin-bottom: 8px; font-size: 16px; }
+#artContent strong { color: #1976d2; font-weight: 700; }
+
+.back-link { color: #0d47a1; cursor: pointer; font-weight: bold; display: inline-block; margin-bottom: 20px; background: #e3f2fd; padding: 10px 20px; border-radius: 30px; font-size: 15px; transition: 0.3s; }
+.back-link:hover { background: #0d47a1; color: white; }
 
 /* ✅ FOOTER STYLE */
-.footer{ background:#eeeeee; padding:40px 20px; text-align:center; margin-top:60px; }    
+.footer{ background:#ffffff; padding:30px 20px; text-align:center; margin-top:60px; border-top: 1px solid #eee; color: #777; }    
 </style>    
 </head>    
     
@@ -66,8 +77,8 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
     
 <div class="side-menu" id="menu">    
     <div class="close-btn" onclick="closeMenu()">✖</div>    
-    <a href="index.html">Home</a>    
-    <a href="mailto:ttnswamidayananda1947@gmail.com">Contact</a>    
+    <a href="index.html">🏠 Home</a>    
+    <a href="mailto:ttnswamidayananda1947@gmail.com">📧 Contact Us</a>    
 </div>    
     
 <div class="container">
@@ -88,7 +99,7 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
 </div>    
     
 <div class="footer">    
-    <p>© 2026 Kalvi Vaanam</p>    
+    <p>© 2026 Kalvi Vaanam | All Rights Reserved</p>    
 </div>    
     
 <script type="module">
@@ -111,7 +122,6 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
     // 1. கட்டுரைகளின் தலைப்புகளை மட்டும் லோடு செய்யும் பங்க்ஷன்
     async function loadArticlesList() {
         try {
-            // orderBy("createdAt") நீக்கப்பட்டுள்ளது ஏனெனில் அட்மின் பேனலில் அதை நாம் சேமிக்கவில்லை
             const querySnapshot = await getDocs(collection(db, "articles"));
             container.innerHTML = "";
 
@@ -124,7 +134,7 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
                 const data = doc.data();
                 const item = document.createElement("div");
                 item.className = "article-item";
-                item.onclick = () => viewArticle(doc.id); // டாக்குமெண்ட் ID-ஐ வைத்து கிளிக் செய்யப்படுகிறது
+                item.onclick = () => viewArticle(doc.id); 
                 
                 item.innerHTML = `<h3>${data.title}</h3>`;
                 container.appendChild(item);
@@ -133,6 +143,58 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
             console.error(err);
             container.innerHTML = "கட்டுரைகளை லோடு செய்வதில் பிழை.";
         }
+    }
+
+    // 🌟 TEXT CONTENT-ஐ DOM ELEMENTS-ஆக மாற்றும் பிரத்யேக டைனமிக் பங்க்ஷன் 🌟
+    function renderStructuredContent(rawText, targetContainer) {
+        targetContainer.innerHTML = ""; // பழைய லோடிங் உரையை நீக்க
+        
+        // இரட்டை வரி இடைவெளிகளைப் (Double Newlines) பொறுத்து பத்திகளாக பிரிக்கிறோம்
+        const blocks = rawText.split(/\n\s*\n/);
+        
+        blocks.forEach(block => {
+            const trimmedBlock = block.trim();
+            if (!trimmedBlock) return;
+            
+            // 1. Heading 2 எனில் (எழுத்துக்கள் '## ' எனத் தொடங்கினால்)
+            if (trimmedBlock.startsWith("## ")) {
+                const h2 = document.createElement("h2");
+                h2.innerHTML = formatInlineStyles(trimmedBlock.replace("## ", ""));
+                targetContainer.appendChild(h2);
+            } 
+            // 2. Heading 3 எனில் (எழுத்துக்கள் '### ' எனத் தொடங்கினால்)
+            else if (trimmedBlock.startsWith("### ")) {
+                const h3 = document.createElement("h3");
+                h3.innerHTML = formatInlineStyles(trimmedBlock.replace("### ", ""));
+                targetContainer.appendChild(h3);
+            } 
+            // 3. குறியீட்டு பட்டியல்கள் எனில் (* அல்லது - எனத் தொடங்கினால்)
+            else if (trimmedBlock.startsWith("* ") || trimmedBlock.startsWith("- ")) {
+                const ul = document.createElement("ul");
+                const lines = trimmedBlock.split("\n");
+                
+                lines.forEach(line => {
+                    const li = document.createElement("li");
+                    // ஸ்டார் அல்லது மைனஸ் குறியீடுகளை நீக்கி உள்ளே இருக்கும் எழுத்தை மட்டும் எடுக்கிறோம்
+                    li.innerHTML = formatInlineStyles(line.replace(/^[\*\-]\s+/, ""));
+                    ul.appendChild(li);
+                });
+                targetContainer.appendChild(ul);
+            } 
+            // 4. சாதாரண பாராகிராஃப் எனில்
+            else {
+                const p = document.createElement("p");
+                // ஒற்றை வரி இடைவெளிகள் இருந்தால் அதை <br> ஆக மாற்றுகிறோம்
+                const processedLineBreaks = trimmedBlock.split("\n").join("<br>");
+                p.innerHTML = formatInlineStyles(processedLineBreaks);
+                targetContainer.appendChild(p);
+            }
+        });
+    }
+
+    // உள் உரைகளில் உள்ள **bold** மார்க்கர்களை <strong> ஆக மாற்றும் பங்க்ஷன்
+    function formatInlineStyles(text) {
+        return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
     }
 
     // 2. கிளிக் செய்த கட்டுரையை மட்டும் முழுமையாக காட்டும் பங்க்ஷன்
@@ -148,7 +210,10 @@ h1{ color: #0d47a1; font-size: 26px; margin-top: 10px; line-height: 1.3; border-
             if (snap.exists()) {
                 const data = snap.data();
                 document.getElementById("artHeading").innerText = data.title;
-                document.getElementById("artContent").innerText = data.content;
+                
+                // 🛠️ 'innerText'க்கு பதிலாக நம்முடைய டைனமிக் DOM Renderer-ஐப் பயன்படுத்துகிறோம்
+                const contentArea = document.getElementById("artContent");
+                renderStructuredContent(data.content, contentArea);
                 
                 document.title = data.title + " | Kalvi Vaanam";
             }
