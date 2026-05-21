@@ -84,7 +84,7 @@ body{background:#f9fbff;}
   <h1>Learn Coding</h1>
   <p>Learn Programming Easily in Tamil<br><strong>Programming in Tamil and English</strong></p>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search Courses (e.g., Python, Learn Coding)..." oninput="searchFromHero()">
+    <input type="text" id="searchInput" placeholder="Search Courses (e.g., Python, Java)..." oninput="searchFromHero()">
     <button onclick="searchFromHero()">Search</button>
   </div>
 </div>
@@ -100,7 +100,8 @@ body{background:#f9fbff;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+// collectionGroup ஐ புதிதாக இம்போர்ட் செய்துள்ளோம்
+import { getFirestore, collectionGroup, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -124,68 +125,64 @@ async function loadData() {
   const courseGrid = document.getElementById("courseGrid");
   
   try {
-    // 1. Get all documents from the root 'courses' collection
-    const coursesSnapshot = await getDocs(collection(db, "courses"));
-    
     courseBar.innerHTML = "";
     courseGrid.innerHTML = "";
     localCoursesData = []; // Reset local array
     
+    // collectionGroup மூலம் அனைத்து basicInfo டாக்குமெண்ட்களையும் எடுக்கிறோம்
+    const basicInfoQuery = collectionGroup(db, "basicInfo");
+    const querySnapshot = await getDocs(basicInfoQuery);
+    
     let i = 0;
     
-    // 2. Loop through each course directory (like python-programming, java etc.)
-    for (const courseDoc of coursesSnapshot.docs) {
-      const languageId = courseDoc.id;
-      
-      // Fetch the subcollection data: courses -> [languageId] -> basicInfo -> infoDoc
-      const basicInfoSnapshot = await getDocs(collection(db, "courses", languageId, "basicInfo"));
-      
-      let languageName = languageId.toUpperCase();
-      let imageLink = "https://via.placeholder.com/150"; // Default fallback image
-      let searchKeywords = [];
-      
-      // If basicInfo/infoDoc exists, extract details
-      if (!basicInfoSnapshot.empty) {
-        const infoData = basicInfoSnapshot.docs[0].data();
-        languageName = infoData.languageName || languageName;
-        imageLink = infoData.imageLink || imageLink;
-        searchKeywords = infoData.searchKeywords || [];
+    querySnapshot.forEach((doc) => {
+      // infoDoc ஆக இருந்தால் மட்டும் டேட்டாவை எடுக்கவும்
+      if(doc.id === "infoDoc") {
+        const infoData = doc.data();
+        
+        // Parent ID-யை எடுக்கிறோம் (உதாரணம்: python-programming)
+        const languageId = doc.ref.parent.parent.id;
+        
+        const languageName = infoData.languageName || languageId.toUpperCase();
+        const imageLink = infoData.imageLink || "https://via.placeholder.com/150";
+        const searchKeywords = infoData.searchKeywords || [];
+        
+        // Target link structure
+        const targetUrl = `course.html?lang=${languageId}`;
+        
+        // Save data locally for real-time Case-Insensitive Keyword Search
+        localCoursesData.push({
+          id: languageId,
+          name: languageName,
+          keywords: searchKeywords.map(k => k.toLowerCase()), // Store as lowerCase
+          elementId: `card-${languageId}`
+        });
+        
+        // --- TOP COURSE BAR LINKS (Scroller) ---
+        const topLink = document.createElement("a");
+        topLink.innerHTML = languageName;
+        topLink.href = targetUrl;
+        topLink.className = "top-course";
+        courseBar.append(topLink);
+        
+        // --- DYNAMIC COURSE GRID CARD ---
+        const card = document.createElement("a");
+        card.href = targetUrl;
+        card.className = "course-card";
+        card.id = `card-${languageId}`;
+        card.style.animationDelay = (i * 0.1) + "s";
+        
+        card.innerHTML = `
+          <img src="${imageLink}" class="course-logo" alt="${languageName} Logo">
+          <div class="course-title">${languageName}</div>
+          <button class="start-btn">Start Learn</button>
+        `;
+        
+        courseGrid.append(card);
+        i++;
       }
-      
-      // Target link structure
-      const targetUrl = `course.html?lang=${languageId}`;
-      
-      // Save data locally for real-time Case-Insensitive Keyword Search
-      localCoursesData.push({
-        id: languageId,
-        name: languageName,
-        keywords: searchKeywords.map(k => k.toLowerCase()), // Store as lowerCase
-        elementId: `card-${languageId}`
-      });
-      
-      // --- TOP COURSE BAR LINKS (Scroller) ---
-      const topLink = document.createElement("a");
-      topLink.innerHTML = languageName;
-      topLink.href = targetUrl;
-      topLink.className = "top-course";
-      courseBar.append(topLink);
-      
-      // --- DYNAMIC COURSE GRID CARD ---
-      const card = document.createElement("a");
-      card.href = targetUrl;
-      card.className = "course-card";
-      card.id = `card-${languageId}`;
-      card.style.animationDelay = (i * 0.1) + "s";
-      
-      card.innerHTML = `
-        <img src="${imageLink}" class="course-logo" alt="${languageName} Logo">
-        <div class="course-title">${languageName}</div>
-        <button class="start-btn">Start Learn</button>
-      `;
-      
-      courseGrid.append(card);
-      i++;
-    }
+    });
+
   } catch (error) {
     console.error("Firebase Data Loading Error:", error);
   }
