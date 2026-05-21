@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalvi Vaanam Academy - Course</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f9fbff; display:flex; flex-direction:column; min-height:100vh;}
+
+/* HEADER */
+.header{width:100%;background:linear-gradient(135deg,#0d47a1,#1976d2);padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;z-index:1000;}
+.left-header{display:flex;align-items:center;gap:12px;}
+.menu-icon{color:white;font-size:24px;cursor:pointer;}
+.logo{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+
+/* LAYOUT */
+.main-container { display: flex; flex: 1; margin-top: 60px; position: relative; }
+
+/* SIDEBAR */
+.sidebar { width: 260px; background: white; border-right: 1px solid #ddd; height: calc(100vh - 60px); position: fixed; left: 0; overflow-y: auto; transition: 0.3s; z-index: 999; }
+.sidebar.closed { left: -260px; }
+.sidebar a { display: block; padding: 15px 20px; color: #333; text-decoration: none; border-bottom: 1px solid #eee; cursor: pointer; }
+.sidebar a.active { background: #e3ecf9; border-left: 4px solid #0d47a1; color: #0d47a1; font-weight: bold; }
+
+/* OVERLAY FOR MOBILE CLOSING */
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 998; }
+.overlay.active { display: block; }
+
+/* CONTENT */
+.content-area { margin-left: 260px; padding: 40px; flex: 1; transition: 0.3s; width: 100%; }
+.content-area.expanded { margin-left: 0; }
+
+/* NAVIGATION BUTTONS */
+.nav-buttons { display: flex; gap: 20px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; }
+.nav-btn { background: linear-gradient(135deg,#0d47a1,#1976d2); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+@media(max-width:768px){
+  .sidebar { left: -260px; }
+  .sidebar.open-mobile { left: 0; }
+  .content-area { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="left-header">
+    <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+    <img src="logo.png" class="logo">
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="main-container">
+  <div class="sidebar" id="sidebarMenu"></div>
+
+  <div class="content-area" id="contentArea">
+    <h1 id="topicTitle">லோட் ஆகிறது...</h1>
+    <div id="topicContent" style="margin-top:20px; line-height:1.6;"></div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn" onclick="goPrev()">பின் செல் (Previous)</button>
+      <button class="nav-btn" id="nextBtn" onclick="goNext()">முன் செல் (Next)</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBg15zUfZNgLVlSQtij1iTuP-8HC3OolMw",
+  authDomain: "kv-academy-web.firebaseapp.com",
+  projectId: "kv-academy-web",
+  storageBucket: "kv-academy-web.firebasestorage.app",
+  messagingSenderId: "986904947154",
+  appId: "1:986904947154:web:676f99636d799ff758800b",
+  measurementId: "G-LBF3QZBW2C"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let topicsData = [];
+let currentIndex = 0;
+const lang = new URLSearchParams(window.location.search).get('lang');
+
+async function init() {
+  const querySnapshot = await getDocs(collection(db, "languages", lang, "topics"));
+  querySnapshot.forEach(doc => topicsData.push({id: doc.id, ...doc.data()}));
+  renderSidebar();
+  loadTopic(0);
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById("sidebarMenu");
+  sidebar.innerHTML = "";
+  topicsData.forEach((t, i) => {
+    const a = document.createElement("a");
+    a.innerText = t.title;
+    a.onclick = () => { loadTopic(i); closeSidebar(); };
+    sidebar.appendChild(a);
+  });
+}
+
+window.loadTopic = (i) => {
+  currentIndex = i;
+  document.getElementById("topicTitle").innerText = topicsData[i].title;
+  document.getElementById("topicContent").innerHTML = topicsData[i].content;
+  document.querySelectorAll('.sidebar a').forEach((el, idx) => el.className = idx === i ? 'active' : '');
+  updateButtons();
+};
+
+function updateButtons() {
+  document.getElementById("prevBtn").disabled = (currentIndex === 0);
+  document.getElementById("nextBtn").disabled = (currentIndex === topicsData.length - 1);
+}
+
+window.toggleSidebar = () => {
+  const sidebar = document.getElementById("sidebarMenu");
+  const overlay = document.getElementById("overlay");
+  sidebar.classList.toggle("open-mobile");
+  overlay.classList.toggle("active");
+};
+
+window.closeSidebar = () => {
+  document.getElementById("sidebarMenu").classList.remove("open-mobile");
+  document.getElementById("overlay").classList.remove("active");
+};
+
+window.goPrev = () => { if(currentIndex > 0) loadTopic(currentIndex - 1); };
+window.goNext = () => { if(currentIndex < topicsData.length - 1) loadTopic(currentIndex + 1); };
+
+window.onload = init;
+</script>
+</body>
+</html>

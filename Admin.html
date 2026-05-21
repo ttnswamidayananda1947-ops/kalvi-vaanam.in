@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KV Academy - Admin Panel</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #333; }
+        .box { background: white; padding: 30px; border-radius: 8px; border: 1px solid #e0e0e0; max-width: 600px; margin: 30px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2, h3, h4 { color: #2c3e50; margin-top: 0; }
+        label { font-weight: 600; display: block; margin-top: 12px; margin-bottom: 5px; color: #4a5568; }
+        input, select, button, textarea { width: 100%; padding: 12px; margin: 6px 0 16px 0; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px; }
+        input:focus, textarea:focus { border-color: #3182ce; outline: none; }
+        button { background-color: #3182ce; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
+        button:hover { background-color: #2b6cb0; }
+        #adminSection { display: none; }
+        .logout-btn { background-color: #e53e3e; margin-top: 20px; }
+        .logout-btn:hover { background-color: #c53030; }
+        .section-divider { border: 0; height: 1px; background: #e2e8f0; margin: 20px 0; }
+        .info-text { font-size: 12px; color: #718096; margin-top: -12px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>KV Academy - அட்மின் பேனல்</h2>
+        
+        <!-- LOGIN SECTION -->
+        <div id="loginSection">
+            <p>டேட்டாவை சேர்க்க அட்மின் கணக்கு மூலம் லாகின் செய்யவும்.</p>
+            <button onclick="loginWithGoogle()" style="background-color: #4285F4;">Sign in with Google (கூகுள் மூலம் லாகின்)</button>
+        </div>
+
+        <!-- ADMIN SECTION -->
+        <div id="adminSection">
+            <p id="userEmail" style="font-weight: bold; color: #2f855a; background: #f0fff4; padding: 10px; border-radius: 4px; text-align: center;"></p>
+            <hr class="section-divider">
+            
+            <h3>புதிய கோர்ஸ் / லாங்குவேஜ் விபரம் சேர்க்க</h3>
+            
+            <!-- 1. BASIC INFO -->
+            <h4>1. அடிப்படை விபரங்கள் (Basic Info)</h4>
+            
+            <label>புரோகிராமிங் லாங்குவேஜ் பெயர் (Language Name):</label>
+            <input type="text" id="langName" placeholder="உதாரணம்: Python Programming, Java">
+            
+            <label>இமேஜ் லிங்க் (Image Link URL):</label>
+            <input type="url" id="imageLink" placeholder="https://example.com/image.png">
+            
+            <label>தேடல் வார்த்தைகள் (Search Keywords):</label>
+            <input type="text" id="searchKeywords" placeholder="உதாரணம்: python, learn python, coding in tamil">
+            <p class="info-text">வார்த்தைகளை கமா ( , ) இட்டு பிரிக்கவும்.</p>
+
+            <hr class="section-divider">
+
+            <!-- 2. TOPICS & SEO -->
+            <h4>2. பாடப்பிரிவு மற்றும் எஸ்சிஓ (Topic & SEO Keywords)</h4>
+            
+            <label>டாபிக் பெயர் (Topic Name):</label>
+            <input type="text" id="topicName" placeholder="உதாரணம்: Introduction to Python, Variables">
+            
+            <label>டாபிக் எஸ்சிஓ கீவேர்ட்ஸ் (Topic SEO Keywords):</label>
+            <textarea id="topicSeoKeywords" rows="3" placeholder="உதாரணம்: what is python, python basics, python tutorial for beginners"></textarea>
+            <p class="info-text">இந்த டாபிக்கிற்கு தேவையான முக்கியமான SEO வார்த்தைகளை கமா ( , ) இட்டு எழுதவும்.</p>
+            
+            <!-- SAVE BUTTONS -->
+            <button onclick="saveData()">டேட்டாபேஸில் சேமி (Save Course Data)</button>
+            <button onclick="logout()" class="logout-btn">Log Out (வெளியேறு)</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBg15zUfZNgLVlSQtij1iTuP-8HC3OolMw",
+          authDomain: "kv-academy-web.firebaseapp.com",
+          projectId: "kv-academy-web",
+          storageBucket: "kv-academy-web.firebasestorage.app",
+          messagingSenderId: "986904947154",
+          appId: "1:986904947154:web:676f99636d799ff758800b",
+          measurementId: "G-LBF3QZBW2C"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        // Admin Email Restriction
+        const adminEmail = "ttnswamidayananda1947@gmail.com";
+
+        // GOOGLE LOGIN FUNCTION
+        window.loginWithGoogle = () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    if (user.email !== adminEmail) {
+                        alert("அனுமதி மறுக்கப்பட்டது! நீங்கள் அட்மின் இல்லை.");
+                        signOut(auth);
+                    }
+                })
+                .catch((error) => {
+                    alert("லாகின் செய்வதில் பிழை: " + error.message);
+                });
+        };
+
+        // MONITOR AUTH STATE
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === adminEmail) {
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("adminSection").style.display = "block";
+                document.getElementById("userEmail").innerText = "Logged in as: " + user.email;
+            } else {
+                document.getElementById("loginSection").style.display = "block";
+                document.getElementById("adminSection").style.display = "none";
+            }
+        });
+
+        // SAVE DATA TO FIRESTORE (UNDER NEW STRUCTURE)
+        window.saveData = async () => {
+            // Get values from inputs
+            const langName = document.getElementById("langName").value.trim();
+            const imageLink = document.getElementById("imageLink").value.trim();
+            const searchKeywords = document.getElementById("searchKeywords").value.trim();
+            
+            const topicName = document.getElementById("topicName").value.trim();
+            const topicSeoKeywords = document.getElementById("topicSeoKeywords").value.trim();
+            
+            // Validation
+            if (langName === "" || topicName === "") {
+                alert("தயவுசெய்து Language Name மற்றும் Topic Name-ஐ கட்டாயம் டைப் செய்யவும்!");
+                return;
+            }
+
+            // Generate IDs automatically
+            // Example: "Python Programming" -> "python-programming"
+            const languageId = langName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            // Example: "Intro to Python" -> "intro-to-python"
+            const topicId = topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+            try {
+                // 1. Save Basic Info inside: courses -> [languageId] -> basicInfo -> infoDoc
+                const basicInfoRef = doc(db, "courses", languageId, "basicInfo", "infoDoc");
+                await setDoc(basicInfoRef, {
+                    languageName: langName,
+                    imageLink: imageLink,
+                    searchKeywords: searchKeywords.split(',').map(kw => kw.trim()) // Convert comma string to Array
+                });
+
+                // 2. Save Topic inside: courses -> [languageId] -> topics -> [topicId]
+                const topicRef = doc(db, "courses", languageId, "topics", topicId);
+                await setDoc(topicRef, {
+                    topicTitle: topicName,
+                    seoKeywords: topicSeoKeywords.split(',').map(kw => kw.trim()), // Convert comma string to Array
+                    createdAt: new Date()
+                });
+
+                alert(`"${langName}" கோர்ஸின் கீழ் "${topicName}" டாபிக் வெற்றிகரமாக சேமிக்கப்பட்டது!`);
+                
+                // Clear inputs except Language details (so you can add multiple topics easily)
+                document.getElementById("topicName").value = "";
+                document.getElementById("topicSeoKeywords").value = "";
+                
+            } catch (error) {
+                alert("டேட்டாவை சேமிப்பதில் பிழை ஏற்பட்டது: " + error.message);
+                console.error(error);
+            }
+        };
+
+        // LOGOUT FUNCTION
+        window.logout = () => {
+            signOut(auth).then(() => {
+                alert("வெளியேறியாச்சு!");
+            });
+        };
+    </script>
+</body>
+</html>
