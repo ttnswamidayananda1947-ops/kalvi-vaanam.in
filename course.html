@@ -60,6 +60,9 @@ body{background:#f4f7f6; display:flex; flex-direction:column; min-height:100vh; 
 
 .divider { border: 0; height: 1px; background: #e0e0e0; margin: 40px 0; }
 
+/* FOOTER */
+.footer { width:100%; background:linear-gradient(135deg,#0d47a1,#1976d2); padding:40px 20px; margin-top:auto; color:white; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; position:relative; z-index:1000; }
+
 @media(max-width:768px){
   .sidebar { left: -280px; }
   .sidebar.open-mobile { left: 0; }
@@ -81,37 +84,30 @@ body{background:#f4f7f6; display:flex; flex-direction:column; min-height:100vh; 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="main-container">
-  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebarMenu">
     <div style="padding: 20px; text-align: center; color: #888;">லோட் ஆகிறது...</div>
   </div>
 
-  <!-- CONTENT AREA -->
   <div class="content-area" id="contentArea">
     
-    <!-- NAVIGATION BUTTONS AT THE TOP -->
     <div class="nav-buttons">
       <button class="nav-btn" id="prevBtn" onclick="goPrev()">⬅ முந்தையது (Prev)</button>
       <button class="nav-btn" id="nextBtn" onclick="goNext()">அடுத்தது (Next) ➡</button>
     </div>
 
-    <!-- TAMIL SECTION -->
     <div class="lang-section" id="tamilSection">
       <h1 class="topic-title tamil-color" id="tamilTitle">லோட் ஆகிறது...</h1>
       
-      <!-- Definition -->
       <div class="def-box def-tamil">
         <div class="section-heading" style="color:#c0392b;">விளக்கம் (Definition):</div>
         <div id="tamilDefinition">தயவுசெய்து காத்திருக்கவும்...</div>
       </div>
       
-      <!-- Syntax -->
       <div class="syntax-box">
         <div class="syntax-heading">கட்டமைப்பு (Syntax):</div>
         <pre id="tamilSyntax">Loading...</pre>
       </div>
 
-      <!-- Real Life Example -->
       <div class="real-life-box">
         <div class="real-life-heading">நடைமுறை உதாரணம் (Real Life Example):</div>
         <div id="tamilRealLife">Loading...</div>
@@ -120,23 +116,19 @@ body{background:#f4f7f6; display:flex; flex-direction:column; min-height:100vh; 
 
     <hr class="divider">
 
-    <!-- ENGLISH SECTION -->
     <div class="lang-section" id="englishSection">
       <h1 class="topic-title english-color" id="englishTitle">Loading...</h1>
       
-      <!-- Definition -->
       <div class="def-box def-english">
         <div class="section-heading" style="color:#0097e6;">Definition:</div>
         <div id="englishDefinition">Please wait...</div>
       </div>
       
-      <!-- Syntax -->
       <div class="syntax-box">
         <div class="syntax-heading">Syntax:</div>
         <pre id="englishSyntax">Loading...</pre>
       </div>
 
-      <!-- Real Life Example -->
       <div class="real-life-box">
         <div class="real-life-heading" style="color: #2980b9;">Real Life Example:</div>
         <div id="englishRealLife">Loading...</div>
@@ -144,6 +136,11 @@ body{background:#f4f7f6; display:flex; flex-direction:column; min-height:100vh; 
     </div>
 
   </div>
+</div>
+
+<div class="footer">
+  <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Kalvi Vaanam Academy</p>
+  <p id="copyrightText"></p>
 </div>
 
 <script type="module">
@@ -262,6 +259,9 @@ window.closeSidebar = () => {
 // Next & Prev Functions
 window.goPrev = () => { if(currentIndex > 0) loadTopic(currentIndex - 1); };
 window.goNext = () => { if(currentIndex < topicsData.length - 1) loadTopic(currentIndex + 1); };
+
+// Copyright Dynamic Year for Footer
+document.getElementById("copyrightText").innerHTML = `Copyright © ${new Date().getFullYear()} கல்வி வாணம்`;
 
 window.onload = init;
 </script>
