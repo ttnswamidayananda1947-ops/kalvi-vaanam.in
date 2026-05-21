@@ -1,71 +1,160 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KV Academy - Admin Panel</title>
+    <title>KV Academy - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #333; }
-        .box { background: white; padding: 30px; border-radius: 8px; border: 1px solid #e0e0e0; max-width: 600px; margin: 30px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2, h3, h4 { color: #2c3e50; margin-top: 0; }
-        label { font-weight: 600; display: block; margin-top: 12px; margin-bottom: 5px; color: #4a5568; }
-        input, select, button, textarea { width: 100%; padding: 12px; margin: 6px 0 16px 0; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px; }
-        input:focus, textarea:focus { border-color: #3182ce; outline: none; }
-        button { background-color: #3182ce; color: white; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
-        button:hover { background-color: #2b6cb0; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { margin: 0; padding: 0; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); color: #333; min-height: 100vh; }
+        
+        /* HEADER */
+        .navbar { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); color: white; }
+        .navbar h2 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-email { font-size: 14px; font-weight: 500; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: none; }
+        .logout-btn { background: #ff4757; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.3s; display: none; }
+        .logout-btn:hover { background: #ff6b81; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+        /* LOGIN SECTION */
+        #loginSection { text-align: center; background: white; padding: 50px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-top: 100px; }
+        #loginSection h3 { font-size: 28px; color: #2f3542; margin-bottom: 10px; }
+        #loginSection p { color: #747d8c; margin-bottom: 30px; }
+        .google-btn { background: #4285F4; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4); }
+        .google-btn:hover { background: #357ae8; transform: translateY(-2px); }
+
+        /* ADMIN SECTION */
         #adminSection { display: none; }
-        .logout-btn { background-color: #e53e3e; margin-top: 20px; }
-        .logout-btn:hover { background-color: #c53030; }
-        .section-divider { border: 0; height: 1px; background: #e2e8f0; margin: 20px 0; }
-        .info-text { font-size: 12px; color: #718096; margin-top: -12px; margin-bottom: 12px; }
+        .card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border-top: 4px solid #4facfe; }
+        .card-header { font-size: 20px; font-weight: 600; color: #2f3542; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card-header::before { content: ''; width: 8px; height: 24px; background: #4facfe; border-radius: 4px; display: inline-block; }
+        
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 20px; }
+        .row { display: flex; gap: 20px; }
+        .col { flex: 1; }
+        
+        label { display: block; font-size: 14px; font-weight: 500; color: #57606f; margin-bottom: 8px; }
+        input[type="text"], input[type="url"], textarea { width: 100%; padding: 12px 15px; border: 1px solid #dfe4ea; border-radius: 8px; font-size: 14px; background: #f8f9fa; transition: 0.3s; color: #2f3542; }
+        input:focus, textarea:focus { border-color: #4facfe; background: white; outline: none; box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.15); }
+        textarea { resize: vertical; min-height: 100px; }
+        .hint { font-size: 12px; color: #a4b0be; margin-top: 5px; }
+
+        /* LANGUAGE SECTIONS (TAMIL & ENGLISH) */
+        .content-box { border: 1px solid #eee; border-radius: 10px; padding: 20px; margin-bottom: 20px; background: #fafbfc; }
+        .content-box.tamil { border-left: 4px solid #e15f41; }
+        .content-box.english { border-left: 4px solid #3dc1d3; }
+        .box-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; margin-top: 0; }
+        .content-box.tamil .box-title { color: #e15f41; }
+        .content-box.english .box-title { color: #3dc1d3; }
+
+        /* SAVE BUTTON */
+        .save-btn { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 15px rgba(56, 239, 125, 0.3); margin-top: 10px; }
+        .save-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 20px rgba(56, 239, 125, 0.4); }
+
+        @media(max-width: 768px) {
+            .row { flex-direction: column; gap: 0; }
+            .navbar h2 { font-size: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <h2>KV Academy - அட்மின் பேனல்</h2>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <h2>KV Academy Admin</h2>
+        <div class="user-info">
+            <span class="user-email" id="userEmail"></span>
+            <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
         
         <!-- LOGIN SECTION -->
         <div id="loginSection">
-            <p>டேட்டாவை சேர்க்க அட்மின் கணக்கு மூலம் லாகின் செய்யவும்.</p>
-            <button onclick="loginWithGoogle()" style="background-color: #4285F4;">Sign in with Google (கூகுள் மூலம் லாகின்)</button>
+            <h3>Welcome Back, Admin!</h3>
+            <p>Please sign in with your authorized Google account to manage courses.</p>
+            <button class="google-btn" onclick="loginWithGoogle()">
+                Sign in with Google
+            </button>
         </div>
 
         <!-- ADMIN SECTION -->
         <div id="adminSection">
-            <p id="userEmail" style="font-weight: bold; color: #2f855a; background: #f0fff4; padding: 10px; border-radius: 4px; text-align: center;"></p>
-            <hr class="section-divider">
             
-            <h3>புதிய கோர்ஸ் / லாங்குவேஜ் விபரம் சேர்க்க</h3>
-            
-            <!-- 1. BASIC INFO -->
-            <h4>1. அடிப்படை விபரங்கள் (Basic Info)</h4>
-            
-            <label>புரோகிராமிங் லாங்குவேஜ் பெயர் (Language Name):</label>
-            <input type="text" id="langName" placeholder="உதாரணம்: Python Programming, Java">
-            
-            <label>இமேஜ் லிங்க் (Image Link URL):</label>
-            <input type="url" id="imageLink" placeholder="https://example.com/image.png">
-            
-            <label>தேடல் வார்த்தைகள் (Search Keywords):</label>
-            <input type="text" id="searchKeywords" placeholder="உதாரணம்: python, learn python, coding in tamil">
-            <p class="info-text">வார்த்தைகளை கமா ( , ) இட்டு பிரிக்கவும்.</p>
+            <!-- STEP 1: COURSE SETUP -->
+            <div class="card">
+                <div class="card-header">Step 1: Course Configuration</div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>Course / Language Name</label>
+                        <input type="text" id="langName" placeholder="e.g., Python Programming">
+                    </div>
+                    <div class="col form-group">
+                        <label>Thumbnail Image URL</label>
+                        <input type="url" id="imageLink" placeholder="https://example.com/logo.png">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Course Search Keywords (for Homepage)</label>
+                    <input type="text" id="searchKeywords" placeholder="e.g., python, learn python, coding">
+                    <div class="hint">Separate keywords with commas ( , )</div>
+                </div>
+            </div>
 
-            <hr class="section-divider">
+            <!-- STEP 2: TOPIC DETAILS -->
+            <div class="card">
+                <div class="card-header">Step 2: Add New Topic</div>
+                
+                <!-- TAMIL CONTENT -->
+                <div class="content-box tamil">
+                    <h4 class="box-title">Tamil Content</h4>
+                    <div class="form-group">
+                        <label>Topic Title (Tamil)</label>
+                        <input type="text" id="topicTitleTamil" placeholder="உதாரணம்: பைதான் அறிமுகம்">
+                    </div>
+                    <div class="form-group">
+                        <label>Explanation (Tamil)</label>
+                        <textarea id="topicExplanationTamil" placeholder="விளக்கத்தை இங்கே தட்டச்சு செய்யவும்... (HTML Tags allowed)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Example Code (Tamil Section)</label>
+                        <textarea id="topicExampleTamil" placeholder="print('வணக்கம்')"></textarea>
+                    </div>
+                </div>
 
-            <!-- 2. TOPICS & SEO -->
-            <h4>2. பாடப்பிரிவு மற்றும் எஸ்சிஓ (Topic & SEO Keywords)</h4>
-            
-            <label>டாபிக் பெயர் (Topic Name):</label>
-            <input type="text" id="topicName" placeholder="உதாரணம்: Introduction to Python, Variables">
-            
-            <label>டாபிக் எஸ்சிஓ கீவேர்ட்ஸ் (Topic SEO Keywords):</label>
-            <textarea id="topicSeoKeywords" rows="3" placeholder="உதாரணம்: what is python, python basics, python tutorial for beginners"></textarea>
-            <p class="info-text">இந்த டாபிக்கிற்கு தேவையான முக்கியமான SEO வார்த்தைகளை கமா ( , ) இட்டு எழுதவும்.</p>
-            
-            <!-- SAVE BUTTONS -->
-            <button onclick="saveData()">டேட்டாபேஸில் சேமி (Save Course Data)</button>
-            <button onclick="logout()" class="logout-btn">Log Out (வெளியேறு)</button>
+                <!-- ENGLISH CONTENT -->
+                <div class="content-box english">
+                    <h4 class="box-title">English Content</h4>
+                    <div class="form-group">
+                        <label>Topic Title (English) - Used for URL ID Generation</label>
+                        <input type="text" id="topicTitleEnglish" placeholder="e.g., Introduction to Python">
+                    </div>
+                    <div class="form-group">
+                        <label>Explanation (English)</label>
+                        <textarea id="topicExplanationEnglish" placeholder="Type explanation here... (HTML Tags allowed)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Example Code (English Section)</label>
+                        <textarea id="topicExampleEnglish" placeholder="print('Hello World')"></textarea>
+                    </div>
+                </div>
+
+                <!-- SEO & SUBMIT -->
+                <div class="form-group" style="margin-top: 30px;">
+                    <label>Topic SEO Keywords</label>
+                    <input type="text" id="topicSeoKeywords" placeholder="e.g., python introduction, python basics">
+                    <div class="hint">Separate keywords with commas ( , )</div>
+                </div>
+
+                <button class="save-btn" onclick="saveData()">Publish Topic to Database 🚀</button>
+            </div>
+
         </div>
     </div>
 
@@ -100,74 +189,104 @@
                 .then((result) => {
                     const user = result.user;
                     if (user.email !== adminEmail) {
-                        alert("அனுமதி மறுக்கப்பட்டது! நீங்கள் அட்மின் இல்லை.");
+                        alert("Access Denied! You are not authorized.");
                         signOut(auth);
                     }
                 })
                 .catch((error) => {
-                    alert("லாகின் செய்வதில் பிழை: " + error.message);
+                    alert("Login Error: " + error.message);
                 });
         };
 
         // MONITOR AUTH STATE
         onAuthStateChanged(auth, (user) => {
+            const loginSection = document.getElementById("loginSection");
+            const adminSection = document.getElementById("adminSection");
+            const userEmailDisplay = document.getElementById("userEmail");
+            const logoutBtn = document.getElementById("logoutBtn");
+
             if (user && user.email === adminEmail) {
-                document.getElementById("loginSection").style.display = "none";
-                document.getElementById("adminSection").style.display = "block";
-                document.getElementById("userEmail").innerText = "Logged in as: " + user.email;
+                loginSection.style.display = "none";
+                adminSection.style.display = "block";
+                userEmailDisplay.style.display = "block";
+                logoutBtn.style.display = "block";
+                userEmailDisplay.innerText = user.email;
             } else {
-                document.getElementById("loginSection").style.display = "block";
-                document.getElementById("adminSection").style.display = "none";
+                loginSection.style.display = "block";
+                adminSection.style.display = "none";
+                userEmailDisplay.style.display = "none";
+                logoutBtn.style.display = "none";
             }
         });
 
-        // SAVE DATA TO FIRESTORE (UNDER NEW STRUCTURE)
+        // SAVE DATA TO FIRESTORE (UPDATED STRUCTURE)
         window.saveData = async () => {
-            // Get values from inputs
+            // Basic Info
             const langName = document.getElementById("langName").value.trim();
             const imageLink = document.getElementById("imageLink").value.trim();
             const searchKeywords = document.getElementById("searchKeywords").value.trim();
             
-            const topicName = document.getElementById("topicName").value.trim();
+            // Tamil Content
+            const titleTa = document.getElementById("topicTitleTamil").value.trim();
+            const expTa = document.getElementById("topicExplanationTamil").value.trim();
+            const exTa = document.getElementById("topicExampleTamil").value.trim();
+
+            // English Content
+            const titleEn = document.getElementById("topicTitleEnglish").value.trim();
+            const expEn = document.getElementById("topicExplanationEnglish").value.trim();
+            const exEn = document.getElementById("topicExampleEnglish").value.trim();
+
+            // SEO
             const topicSeoKeywords = document.getElementById("topicSeoKeywords").value.trim();
             
             // Validation
-            if (langName === "" || topicName === "") {
-                alert("தயவுசெய்து Language Name மற்றும் Topic Name-ஐ கட்டாயம் டைப் செய்யவும்!");
+            if (langName === "" || titleEn === "") {
+                alert("Please fill out 'Course Name' and 'Topic Title (English)' at minimum!");
                 return;
             }
 
             // Generate IDs automatically
-            // Example: "Python Programming" -> "python-programming"
             const languageId = langName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-            // Example: "Intro to Python" -> "intro-to-python"
-            const topicId = topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            const topicId = titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
             try {
-                // 1. Save Basic Info inside: courses -> [languageId] -> basicInfo -> infoDoc
+                // 1. Save Basic Info
                 const basicInfoRef = doc(db, "courses", languageId, "basicInfo", "infoDoc");
                 await setDoc(basicInfoRef, {
                     languageName: langName,
                     imageLink: imageLink,
-                    searchKeywords: searchKeywords.split(',').map(kw => kw.trim()) // Convert comma string to Array
-                });
+                    searchKeywords: searchKeywords.split(',').map(kw => kw.trim()).filter(k => k)
+                }, { merge: true }); // Using merge so it doesn't overwrite if existing
 
-                // 2. Save Topic inside: courses -> [languageId] -> topics -> [topicId]
+                // 2. Save Topic Information (Tamil & English)
                 const topicRef = doc(db, "courses", languageId, "topics", topicId);
                 await setDoc(topicRef, {
-                    topicTitle: topicName,
-                    seoKeywords: topicSeoKeywords.split(',').map(kw => kw.trim()), // Convert comma string to Array
+                    topicTitleTamil: titleTa,
+                    topicExplanationTamil: expTa,
+                    topicExampleTamil: exTa,
+                    topicTitleEnglish: titleEn,
+                    topicExplanationEnglish: expEn,
+                    topicExampleEnglish: exEn,
+                    seoKeywords: topicSeoKeywords.split(',').map(kw => kw.trim()).filter(k => k),
                     createdAt: new Date()
                 });
 
-                alert(`"${langName}" கோர்ஸின் கீழ் "${topicName}" டாபிக் வெற்றிகரமாக சேமிக்கப்பட்டது!`);
+                alert(`Topic "${titleEn}" has been published successfully under "${langName}"!`);
                 
-                // Clear inputs except Language details (so you can add multiple topics easily)
-                document.getElementById("topicName").value = "";
+                // Clear Topic Inputs to easily add the next topic
+                document.getElementById("topicTitleTamil").value = "";
+                document.getElementById("topicExplanationTamil").value = "";
+                document.getElementById("topicExampleTamil").value = "";
+                document.getElementById("topicTitleEnglish").value = "";
+                document.getElementById("topicExplanationEnglish").value = "";
+                document.getElementById("topicExampleEnglish").value = "";
                 document.getElementById("topicSeoKeywords").value = "";
                 
+                // Scroll back to the start of Step 2
+                window.scrollBy({ top: -300, behavior: 'smooth' });
+
             } catch (error) {
-                alert("டேட்டாவை சேமிப்பதில் பிழை ஏற்பட்டது: " + error.message);
+                alert("Error saving data: " + error.message);
                 console.error(error);
             }
         };
@@ -175,7 +294,7 @@
         // LOGOUT FUNCTION
         window.logout = () => {
             signOut(auth).then(() => {
-                alert("வெளியேறியாச்சு!");
+                alert("Logged out successfully!");
             });
         };
     </script>
