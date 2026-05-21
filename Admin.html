@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KV Academy - Advanced Admin Dashboard</title>
+    <title>KV Academy - Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -47,13 +47,13 @@
         textarea { resize: vertical; min-height: 100px; }
         .hint { font-size: 12px; color: #a4b0be; margin-top: 5px; }
 
-        /* LANGUAGE SECTIONS (TAMIL & ENGLISH) */
+        /* LANGUAGE SECTIONS */
         .content-box { border: 1px solid #eee; border-radius: 10px; padding: 20px; margin-bottom: 20px; background: #fafbfc; }
-        .content-box.tamil { border-left: 4px solid #e15f41; }
         .content-box.english { border-left: 4px solid #3dc1d3; }
+        .content-box.tamil { border-left: 4px solid #e15f41; }
         .box-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; margin-top: 0; }
-        .content-box.tamil .box-title { color: #e15f41; }
         .content-box.english .box-title { color: #3dc1d3; }
+        .content-box.tamil .box-title { color: #e15f41; }
 
         /* BUTTONS */
         .save-btn { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 15px rgba(56, 239, 125, 0.3); margin-top: 10px; }
@@ -97,8 +97,8 @@
                 <div class="card-header">Option A: Create New Course / Language</div>
                 <div class="row">
                     <div class="col form-group">
-                        <label>New Course Name</label>
-                        <input type="text" id="newLangName" placeholder="e.g., C Programming, Java">
+                        <label>New Course Name (English Only)</label>
+                        <input type="text" id="newLangName" placeholder="e.g., Python Programming, Java">
                     </div>
                     <div class="col form-group">
                         <label>Thumbnail Image URL</label>
@@ -124,38 +124,17 @@
                     <select id="courseSelect">
                         <option value="">-- Loading Active Courses... --</option>
                     </select>
-                    <div class="hint" style="color: #64748b;">Choose the course you want to add this topic into.</div>
                 </div>
 
                 <hr style="border:0; height:1px; background:#e2e8f0; margin:25px 0;">
                 
-                <!-- TAMIL CONTENT -->
-                <div class="content-box tamil">
-                    <h4 class="box-title">Tamil Content</h4>
-                    <div class="form-group">
-                        <label>Topic Title (Tamil)</label>
-                        <input type="text" id="topicTitleTamil" placeholder="உதாரணம்: மாறிகள் அறிமுகம்">
-                    </div>
-                    <div class="form-group">
-                        <label>Definition (Tamil)</label>
-                        <textarea id="topicDefinitionTamil" placeholder="விளக்கத்தை இங்கே தட்டச்சு செய்யவும்... (HTML Tags allowed)"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Syntax (Tamil Section)</label>
-                        <textarea id="topicSyntaxTamil" style="font-family: monospace;" placeholder="data_type variable_name;"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Real Life Example (Tamil Section)</label>
-                        <textarea id="topicExampleTamil" placeholder="பள்ளி மாணவர்களின் மதிப்பெண்களை சேமிக்க மாறும் பெட்டி..."></textarea>
-                    </div>
-                </div>
-
-                <!-- ENGLISH CONTENT -->
+                <!-- ENGLISH CONTENT (MAIN / MANDATORY) -->
                 <div class="content-box english">
-                    <h4 class="box-title">English Content</h4>
+                    <h4 class="box-title">English Content (Main & Sidebar Menu Title)</h4>
                     <div class="form-group">
-                        <label>Topic Title (English) - Used for URL Document ID</label>
+                        <label>Topic Title (English) *</label>
                         <input type="text" id="topicTitleEnglish" placeholder="e.g., Introduction to Variables">
+                        <div class="hint" style="color: #4facfe;">This title will be used in Menu Bars, URL Generation, and core tracking.</div>
                     </div>
                     <div class="form-group">
                         <label>Definition (English)</label>
@@ -171,6 +150,28 @@
                     </div>
                 </div>
 
+                <!-- TAMIL CONTENT (DISPLAY ONLY) -->
+                <div class="content-box tamil">
+                    <h4 class="box-title">Tamil Content (Display Label Only)</h4>
+                    <div class="form-group">
+                        <label>Topic Title (Tamil)</label>
+                        <input type="text" id="topicTitleTamil" placeholder="உதாரணம்: மாறிகள் அறிமுகம்">
+                        <div class="hint">For on-screen display text context only.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Definition (Tamil)</label>
+                        <textarea id="topicDefinitionTamil" placeholder="விளக்கத்தை இங்கே தட்டச்சு செய்யவும்... (HTML Tags allowed)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Syntax (Tamil Section)</label>
+                        <textarea id="topicSyntaxTamil" style="font-family: monospace;" placeholder="தரவு_வகை மாறி_பெயர்;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Real Life Example (Tamil Section)</label>
+                        <textarea id="topicExampleTamil" placeholder="பள்ளி மாணவர்களின் மதிப்பெண்களை சேமிக்க மாறும் பெட்டி..."></textarea>
+                    </div>
+                </div>
+
                 <!-- SEO & SUBMIT -->
                 <div class="form-group" style="margin-top: 30px;">
                     <label>Topic SEO Keywords</label>
@@ -178,7 +179,7 @@
                     <div class="hint">Separate keywords with commas ( , )</div>
                 </div>
 
-                <button class="save-btn" onclick="saveTopicData()">Publish / Update Topic to Selected Course 🚀</button>
+                <button class="save-btn" onclick="saveTopicData()">Publish Topic to Selected Course 🚀</button>
             </div>
 
         </div>
@@ -206,16 +207,15 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // Admin Email Restriction
         const adminEmail = "ttnswamidayananda1947@gmail.com";
 
-        // GOOGLE LOGIN FUNCTION
+        // GOOGLE LOGIN
         window.loginWithGoogle = () => {
             signInWithPopup(auth, provider)
                 .then((result) => {
                     const user = result.user;
                     if (user.email !== adminEmail) {
-                        alert("Access Denied! You are not authorized.");
+                        alert("Access Denied! Authorized admin only.");
                         signOut(auth);
                     }
                 })
@@ -238,7 +238,6 @@
                 logoutBtn.style.display = "block";
                 userEmailDisplay.innerText = user.email;
                 
-                // Fetch list of active courses for dropdown list
                 fetchCourses();
             } else {
                 loginSection.style.display = "block";
@@ -248,7 +247,7 @@
             }
         });
 
-        // FETCH COURSES FROM FIRESTORE TO POPULATE DROPDOWN
+        // FETCH ACTIVE COURSES FOR DROPDOWN
         async function fetchCourses() {
             const courseSelect = document.getElementById("courseSelect");
             try {
@@ -257,11 +256,8 @@
                 
                 let count = 0;
                 querySnapshot.forEach((doc) => {
-                    // Each document inside "courses" collection is a language setup
                     const langId = doc.id;
                     const langData = doc.data();
-                    
-                    // We try to grab languageName from inline data or fall back to document ID name
                     const optionName = langData.languageName || langId.toUpperCase().replace(/-/g, ' ');
                     
                     const option = document.createElement("option");
@@ -272,30 +268,27 @@
                 });
 
                 if(count === 0) {
-                    courseSelect.innerHTML = '<option value="">No courses found. Please create one above first!</option>';
+                    courseSelect.innerHTML = '<option value="">No courses active. Create one above!</option>';
                 }
             } catch (error) {
-                console.error("Error loading courses:", error);
-                courseSelect.innerHTML = '<option value="">Error loading courses from Database</option>';
+                courseSelect.innerHTML = '<option value="">Error fetching active courses</option>';
             }
         }
 
-        // OPTION A: INITIALIZE / CREATE NEW COURSE FUNCTION
+        // OPTION A: INITIALIZE NEW COURSE
         window.createNewCourse = async () => {
             const newLangName = document.getElementById("newLangName").value.trim();
             const newImageLink = document.getElementById("newImageLink").value.trim();
             const newSearchKeywords = document.getElementById("newSearchKeywords").value.trim();
 
             if (newLangName === "") {
-                alert("Please type a Course/Language Name!");
+                alert("Please specify an English Course Name!");
                 return;
             }
 
-            // Create safe alphanumeric path string for Firestore document ID (e.g., "C++ Programming" -> "c-programming")
             const languageId = newLangName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
             try {
-                // Save basic structural tracking directly on document root + basicInfo subcollection
                 const rootCourseRef = doc(db, "courses", languageId);
                 await setDoc(rootCourseRef, { languageName: newLangName }, { merge: true });
 
@@ -306,98 +299,92 @@
                     searchKeywords: newSearchKeywords.split(',').map(kw => kw.trim()).filter(k => k)
                 });
 
-                alert(`Course "${newLangName}" has been successfully initialized in the database!`);
+                alert(`Course "${newLangName}" has been successfully configured!`);
                 
-                // Clear input boxes
                 document.getElementById("newLangName").value = "";
                 document.getElementById("newImageLink").value = "";
                 document.getElementById("newSearchKeywords").value = "";
                 
-                // Refresh selection list so it is immediately selectable
                 await fetchCourses();
                 document.getElementById("courseSelect").value = languageId;
 
             } catch (error) {
-                alert("Failed to create course structural profile: " + error.message);
+                alert("Course registration error: " + error.message);
             }
         };
 
-        // OPTION B: SAVE / UPDATE TOPICS WITHIN SELECTED COURSE
+        // OPTION B: SAVE / UPDATE TOPIC DATA
         window.saveTopicData = async () => {
             const selectedLangId = document.getElementById("courseSelect").value;
             
-            // Tamil Content Values
-            const titleTa = document.getElementById("topicTitleTamil").value.trim();
-            const defTa = document.getElementById("topicDefinitionTamil").value.trim();
-            const syntaxTa = document.getElementById("topicSyntaxTamil").value.trim();
-            const exTa = document.getElementById("topicExampleTamil").value.trim();
-
-            // English Content Values
+            // English (Main Data)
             const titleEn = document.getElementById("topicTitleEnglish").value.trim();
             const defEn = document.getElementById("topicDefinitionEnglish").value.trim();
             const syntaxEn = document.getElementById("topicSyntaxEnglish").value.trim();
             const exEn = document.getElementById("topicExampleEnglish").value.trim();
 
-            // SEO Keywords
+            // Tamil (Display Text Only)
+            const titleTa = document.getElementById("topicTitleTamil").value.trim();
+            const defTa = document.getElementById("topicDefinitionTamil").value.trim();
+            const syntaxTa = document.getElementById("topicSyntaxTamil").value.trim();
+            const exTa = document.getElementById("topicExampleTamil").value.trim();
+
             const topicSeoKeywords = document.getElementById("topicSeoKeywords").value.trim();
             
-            // Validations
             if (selectedLangId === "") {
-                alert("Please select a Course from the dropdown array list first!");
+                alert("Please pick an existing Course database profile from the dropdown list!");
                 return;
             }
             if (titleEn === "") {
-                alert("Topic Title (English) is mandatory to construct the unique URL routing ID reference!");
+                alert("English Topic Title is mandatory! It drives the Sidebar Menu and Document ID.");
                 return;
             }
 
-            // Automate topic alphanumeric collection path safe standard name routing
+            // Document ID is generated using the English Title
             const topicId = titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
             try {
-                // Store mapped properties matching structural configuration values inside targeted subcollection mapping
                 const topicRef = doc(db, "courses", selectedLangId, "topics", topicId);
                 await setDoc(topicRef, {
-                    titleTamil: titleTa,
-                    definitionTamil: defTa, syntaxTamil: syntaxTa,
-                    exampleTamil: exTa,
-                    titleEnglish: titleEn,
+                    titleEnglish: titleEn,        // Will map to Menu Bar and Main Headers
                     definitionEnglish: defEn,
                     syntaxEnglish: syntaxEn,
                     exampleEnglish: exEn,
+                    titleTamil: titleTa,          // Will be used for on-screen text block display only
+                    definitionTamil: defTa,
+                    syntaxTamil: syntaxTa,
+                    exampleTamil: exTa,
                     seoKeywords: topicSeoKeywords.split(',').map(kw => kw.trim()).filter(k => k),
                     createdAt: new Date()
                 });
 
-                alert(`Topic "${titleEn}" successfully synchronized & updated inside selected profile path!`);
+                alert(`Topic "${titleEn}" synced successfully!`);
                 
-                // Flush topic-related content fields to prepare for next update injection
-                document.getElementById("topicTitleTamil").value = "";
-                document.getElementById("topicDefinitionTamil").value = "";
-                document.getElementById("topicSyntaxTamil").value = "";
-                document.getElementById("topicExampleTamil").value = "";
+                // Clear Input Fields
                 document.getElementById("topicTitleEnglish").value = "";
                 document.getElementById("topicDefinitionEnglish").value = "";
                 document.getElementById("topicSyntaxEnglish").value = "";
                 document.getElementById("topicExampleEnglish").value = "";
+                document.getElementById("topicTitleTamil").value = "";
+                document.getElementById("topicDefinitionTamil").value = "";
+                document.getElementById("topicSyntaxTamil").value = "";
+                document.getElementById("topicExampleTamil").value = "";
                 document.getElementById("topicSeoKeywords").value = "";
                 
-                // Smooth scroll view context shift
                 window.scrollBy({ top: -350, behavior: 'smooth' });
 
             } catch (error) {
-                alert("Error synchronizing transactional profile values: " + error.message);
+                alert("Database transmission failed: " + error.message);
                 console.error(error);
             }
         };
 
-        // LOGOUT FUNCTION
+        // LOGOUT
         window.logout = () => {
             signOut(auth).then(() => {
-                alert("Logged out successfully!");
+                alert("Logged out!");
             });
         };
     </script>
 </body>
 </html>
-   
