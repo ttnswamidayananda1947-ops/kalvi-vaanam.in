@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalvi Vaanam Academy</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
 html{scroll-behavior:smooth;}
 body{background:#f9fbff;}
+
 /* HEADER */
 .header{width:100%;background:linear-gradient(135deg,#0d47a1,#1976d2);padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;z-index:1000;transition:0.3s;}
 .left-header{display:flex;align-items:center;gap:12px;flex:1;}
@@ -16,42 +17,58 @@ body{background:#f9fbff;}
 .header-search input{width:100%;border:none;outline:none;padding:12px;font-size:14px;background:transparent;}
 .header-search button{background:#00b341;color:white;border:none;padding:12px 14px;cursor:pointer;}
 .signin-btn{background:#00b341;color:white;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;transition:0.3s;flex-shrink:0;}
-/* COURSE BAR */
-.course-bar{width:100%;background:linear-gradient(135deg,#0d47a1,#1976d2);overflow-x:auto;white-space:nowrap;padding:12px 10px;position:fixed;top:69px;left:0;z-index:999;}
+
+/* COURSE BAR (Scroller) */
+.course-bar{width:100%;background:linear-gradient(135deg,#0d47a1,#1976d2);overflow-x:auto;white-space:nowrap;padding:12px 15px;position:fixed;top:69px;left:0;z-index:999;box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
 .course-bar::-webkit-scrollbar{display:none;}
-.top-course{display:inline-block;color:white;text-decoration:none;margin-right:20px;font-size:15px;transition:0.3s;}
+.top-course{display:inline-block;color:white;text-decoration:none;margin-right:25px;font-size:15px;transition:0.3s;font-weight: bold;cursor:pointer;}
+.top-course:hover{color: #ffeb3b; transform: scale(1.05);}
+
 /* HERO */
 .hero{width:100%;min-height:500px;background:white;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:180px 20px 80px;transition:0.3s;}
 .hero h1{color:#111;font-size:60px;margin-bottom:20px;transition:0.3s;animation: fadeInUp 0.8s ease-out;}
 .hero p{color:#555;font-size:20px;margin-bottom:30px;transition:0.3s;animation: fadeInUp 1s ease-out;}
+
 /* MAIN SEARCH */
 .search-box{width:100%;max-width:650px;display:flex;background:white;overflow:hidden;border-radius:50px;padding:5px;border:2px solid #ddd;transition:0.3s;}
 .search-box input{flex:1;padding:18px;border:none;outline:none;font-size:17px;min-width:0;}
 .search-box button{background:#00b341;color:white;border:none;padding:0 25px;font-size:16px;font-weight:bold;cursor:pointer;border-radius:50px;min-width:110px;}
+
 /* COURSE SECTION */
-.course-section{width:100%;background:white;padding:20px;min-height: 400px;}
-.course-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
-.course-card{height:110px;border-radius:8px;display:flex;justify-content:center;align-items:center;font-size:24px;font-weight:bold;text-decoration:none;color:#111;transition:0.3s;box-shadow:0 4px 10px rgba(0,0,0,0.15);animation: fadeIn 0.5s ease-in forwards;}
-.course-card:hover{transform:scale(1.03);box-shadow: 0 6px 15px rgba(0,0,0,0.2);}
+.course-section{width:100%;background:white;padding:40px 20px;min-height: 400px;}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:25px;max-width:1200px;margin:0 auto;}
+
+/* DYNAMIC COURSE CARD */
+.course-card{background:white;border-radius:12px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:20px;text-decoration:none;color:#111;transition:0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.1);animation: fadeIn 0.5s ease-in forwards;border: 1px solid #eef2f5;text-align:center;cursor:pointer;}
+.course-card:hover{transform:translateY(-5px);box-shadow: 0 8px 20px rgba(0,0,0,0.15);}
+.course-logo{width:75px;height:75px;object-fit:contain;margin-bottom:15px;border-radius:8px;}
+.course-title{font-size:20px;font-weight:bold;color:#2c3e50;margin-bottom:15px;line-height:1.3;}
+.start-btn{background:#00b341;color:white;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:bold;cursor:pointer;transition:0.2s;width:100%;box-shadow: 0 2px 5px rgba(0,179,65,0.3);}
+.start-btn:hover{background:#009432;}
+
 /* FOOTER */
 .footer{width:100%;background:linear-gradient(135deg,#0d47a1,#1976d2);padding:40px 20px;margin-top:40px;color:white;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+
 /* ACTIVE HEADER */
 .header.active .header-search{width:220px;margin-left:-5px;}
 .header.active .logo{width:38px;height:38px;}
 .header.active .signin-btn{padding:8px 14px;font-size:13px;}
+
 /* ANIMATIONS */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-/* MOBILE */
+
+/* MOBILE RESPONSIVENESS */
 @media(max-width:700px){
-.hero{padding-top:180px;}.hero h1{font-size:42px;}.hero p{font-size:16px;}.search-box{max-width:100%;}.search-box input{padding:15px;font-size:15px;}.search-box button{min-width:85px;padding:0 12px;font-size:14px;}.course-grid{grid-template-columns:1fr 1fr;}.course-card{height:100px;font-size:20px;}.header.active .header-search{width:160px;}
+.hero{padding-top:180px;}.hero h1{font-size:38px;}.hero p{font-size:16px;}.search-box{max-width:100%;}.search-box input{padding:15px;font-size:15px;}.search-box button{min-width:85px;padding:0 12px;font-size:14px;}.course-grid{grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));gap:15px;}.course-card{padding:15px;}.course-logo{width:55px;height:55px;}.course-title{font-size:16px;}.start-btn{padding:8px 12px;font-size:12px;}.header.active .header-search{width:160px;}
 }
 </style>
 </head>
 <body>
+
 <div class="header" id="header">
   <div class="left-header">
-    <img src="logo.png" class="logo">
+    <img src="logo.png" class="logo" alt="Logo">
     <div class="header-search">
       <input type="text" id="headerSearchInput" placeholder="Search..." oninput="searchFromHeader()">
       <button onclick="searchFromHeader()">🔍</button>
@@ -59,27 +76,33 @@ body{background:#f9fbff;}
   </div>
   <button class="signin-btn">Sign In</button>
 </div>
+
+<!-- SCOLLER BAR (This will contain all languages) -->
 <div class="course-bar" id="courseBar"></div>
+
 <div class="hero" id="hero">
   <h1>Learn Coding</h1>
   <p>Learn Programming Easily in Tamil<br><strong>Programming in Tamil and English</strong></p>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search Courses..." oninput="searchFromHero()">
+    <input type="text" id="searchInput" placeholder="Search Courses (e.g., Python, Learn Coding)..." oninput="searchFromHero()">
     <button onclick="searchFromHero()">Search</button>
   </div>
 </div>
+
 <div class="course-section">
   <div class="course-grid" id="courseGrid"></div>
 </div>
+
 <div class="footer">
   <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Kalvi Vaanam Academy</p>
   <p id="copyrightText"></p>
 </div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Your Updated Firebase Configuration
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBg15zUfZNgLVlSQtij1iTuP-8HC3OolMw",
   authDomain: "kv-academy-web.firebaseapp.com",
@@ -92,80 +115,131 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const colors = ["#f5c2cf","#c7e2d0","#8fd0d6","#f0e39b","#e4dddd"];
+
+// Array to store all downloaded course info for quick client-side filtering
+let localCoursesData = [];
 
 async function loadData() {
   const courseBar = document.getElementById("courseBar");
   const courseGrid = document.getElementById("courseGrid");
+  
   try {
-    // Fetching data from Firebase 'languages' collection
-    const querySnapshot = await getDocs(collection(db, "languages"));
+    // 1. Get all documents from the root 'courses' collection
+    const coursesSnapshot = await getDocs(collection(db, "courses"));
+    
     courseBar.innerHTML = "";
     courseGrid.innerHTML = "";
+    localCoursesData = []; // Reset local array
+    
     let i = 0;
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const name = data.name || doc.id.toUpperCase();
-      const link = `course.html?lang=${doc.id}`;
-      // Top Bar Link
+    
+    // 2. Loop through each course directory (like python-programming, java etc.)
+    for (const courseDoc of coursesSnapshot.docs) {
+      const languageId = courseDoc.id;
+      
+      // Fetch the subcollection data: courses -> [languageId] -> basicInfo -> infoDoc
+      const basicInfoSnapshot = await getDocs(collection(db, "courses", languageId, "basicInfo"));
+      
+      let languageName = languageId.toUpperCase();
+      let imageLink = "https://via.placeholder.com/150"; // Default fallback image
+      let searchKeywords = [];
+      
+      // If basicInfo/infoDoc exists, extract details
+      if (!basicInfoSnapshot.empty) {
+        const infoData = basicInfoSnapshot.docs[0].data();
+        languageName = infoData.languageName || languageName;
+        imageLink = infoData.imageLink || imageLink;
+        searchKeywords = infoData.searchKeywords || [];
+      }
+      
+      // Target link structure
+      const targetUrl = `course.html?lang=${languageId}`;
+      
+      // Save data locally for real-time Case-Insensitive Keyword Search
+      localCoursesData.push({
+        id: languageId,
+        name: languageName,
+        keywords: searchKeywords.map(k => k.toLowerCase()), // Store as lowerCase
+        elementId: `card-${languageId}`
+      });
+      
+      // --- TOP COURSE BAR LINKS (Scroller) ---
       const topLink = document.createElement("a");
-      topLink.innerHTML = name;
-      topLink.href = link;
+      topLink.innerHTML = languageName;
+      topLink.href = targetUrl;
       topLink.className = "top-course";
       courseBar.append(topLink);
-      // Grid Card
+      
+      // --- DYNAMIC COURSE GRID CARD ---
       const card = document.createElement("a");
-      card.innerHTML = name;
-      card.href = link;
+      card.href = targetUrl;
       card.className = "course-card";
-      card.style.background = colors[i % colors.length];
+      card.id = `card-${languageId}`;
       card.style.animationDelay = (i * 0.1) + "s";
+      
+      card.innerHTML = `
+        <img src="${imageLink}" class="course-logo" alt="${languageName} Logo">
+        <div class="course-title">${languageName}</div>
+        <button class="start-btn">Start Learn</button>
+      `;
+      
       courseGrid.append(card);
       i++;
-    });
+    }
   } catch (error) {
-    console.error("Firebase Error:", error);
+    console.error("Firebase Data Loading Error:", error);
   }
 }
 
-// Universal Search Function (Filters Firebase Data Cards)
+// Case-Insensitive Advanced Search Function
 window.performSearch = function(query) {
-  const input = query.toLowerCase();
-  const cards = document.querySelectorAll(".course-card");
-  cards.forEach(card => {
-    const text = card.innerHTML.toLowerCase();
-    card.style.display = text.includes(input) ? "flex" : "none";
+  const cleanInput = query.toLowerCase().trim();
+  
+  localCoursesData.forEach(course => {
+    const cardElement = document.getElementById(course.elementId);
+    if (!cardElement) return;
+    
+    // Check if typed query matches the language title OR exists inside the keywords array
+    const matchesTitle = course.name.toLowerCase().includes(cleanInput);
+    const matchesKeywords = course.keywords.some(keyword => keyword.includes(cleanInput));
+    
+    if (cleanInput === "" || matchesTitle || matchesKeywords) {
+      cardElement.style.display = "flex";
+    } else {
+      cardElement.style.display = "none";
+    }
   });
 }
 
-// Link Header Search with Hero Search
+// Syncing Header Search to Hero Area
 window.searchFromHeader = function() {
   const val = document.getElementById("headerSearchInput").value;
-  document.getElementById("searchInput").value = val; // Sync values
+  document.getElementById("searchInput").value = val;
   performSearch(val);
 }
 
-// Link Hero Search with Header Search
+// Syncing Hero Search to Header Area
 window.searchFromHero = function() {
   const val = document.getElementById("searchInput").value;
-  document.getElementById("headerSearchInput").value = val; // Sync values
+  document.getElementById("headerSearchInput").value = val;
   performSearch(val);
 }
 
-// Header Animation Logic
-window.addEventListener("scroll",function(){
+// Header Dynamic Scrolling Animation Logic
+window.addEventListener("scroll", function(){
   const header = document.getElementById("header");
   const heroSearch = document.querySelector(".search-box");
-  const searchTop = heroSearch.getBoundingClientRect().top;
-  if(searchTop <= 90) header.classList.add("active");
-  else header.classList.remove("active");
+  if(heroSearch) {
+    const searchTop = heroSearch.getBoundingClientRect().top;
+    if(searchTop <= 90) header.classList.add("active");
+    else header.classList.remove("active");
+  }
 });
 
-// Copyright Year Update
-const currentYear = new Date().getFullYear();
-document.getElementById("copyrightText").innerHTML = `Copyright © ${currentYear} கல்வி வாணம்`;
+// Copyright Dynamic Year
+document.getElementById("copyrightText").innerHTML = `Copyright © ${new Date().getFullYear()} கல்வி வாணம்`;
 
-// Load Firebase Data on start
+// Trigger loader on windows load
 window.onload = loadData;
 </script>
 </body>
